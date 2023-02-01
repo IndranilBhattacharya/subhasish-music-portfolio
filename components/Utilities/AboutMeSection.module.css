@@ -1,0 +1,46 @@
+.bw-background {
+  @apply w-full h-full bg-cover;
+  background-image: url("/images/subhasish/Subhasish_BG_Initial.png");
+}
+
+.content {
+  @apply pt-[10%] flex flex-wrap w-[calc(48%_-_2rem)];
+}
+
+.mask-animator {
+  @apply z-10 w-full h-full absolute bg-cover overflow-hidden;
+  mask-size: cover;
+  mask-position: 0% 0%;
+  mask-size: 500% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  -webkit-mask-position: 0% 0%;
+  -webkit-mask-size: 500% 100%;
+  -webkit-mask-repeat: no-repeat;
+  transition: -webkit-mask-position;
+  background-image: url("/images/subhasish/Subhasish.png");
+  mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
+  -webkit-mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
+}
+
+.animate-mask {
+  animation-delay: 1.25s;
+  animation: bwToColor 1.5s steps(4) forwards;
+}
+
+@keyframes bwToColor {
+  0% {
+    mask-position: 0% 0%;
+    -webkit-mask-position: 0% 0%;
+  }
+  99% {
+    mask-position: 100% 0%;
+    -webkit-mask-position: 100% 0%;
+    mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
+    -webkit-mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
+  }
+  100% {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
