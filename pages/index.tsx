@@ -4,6 +4,7 @@ import { useScroll } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
 import {
+  fetchYTChannelStats,
   fetchYTVideoContent,
   fetchYTChannelContent,
   fetchYTChannelPlayListItems,
@@ -71,9 +72,12 @@ const Home: NextPage<IndexISRProps> = (props) => {
         </MainSectionsWrapper>
         <section className="fixed top-0 z-20 right-[4vw] w-2/5 h-screen flex justify-center items-center overflow-hidden">
           <IllustrativeExpressions
-            youTubeRef={portfolioSectionRef}
-            skillSetRef={skillSetSectionRef}
-            aboutMeRef={aboutMeSectionRef}
+            {...{
+              ...props.ytStats,
+              youTubeRef: portfolioSectionRef,
+              skillSetRef: skillSetSectionRef,
+              aboutMeRef: aboutMeSectionRef,
+            }}
           />
         </section>
       </main>
@@ -82,6 +86,11 @@ const Home: NextPage<IndexISRProps> = (props) => {
 };
 
 export async function getStaticProps() {
+  let ytStats = {
+    viewCount: 0,
+    videoCount: 0,
+    subscriberCount: 0,
+  };
   let ytVideos: YTVideoResponse[] = [];
 
   try {
@@ -98,8 +107,21 @@ export async function getStaticProps() {
     console.log(err);
   }
 
+  try {
+    const ytChannelStatsResponse = await fetchYTChannelStats();
+    const ytRawStat = ytChannelStatsResponse.data.items[0].statistics;
+    ytStats = {
+      viewCount: +ytRawStat.viewCount,
+      videoCount: +ytRawStat.videoCount,
+      subscriberCount: +ytRawStat.subscriberCount,
+    };
+  } catch (err) {
+    console.log(err);
+  }
+
   return {
     props: {
+      ytStats,
       ytVideos,
     },
     revalidate: 3600 * 24,
