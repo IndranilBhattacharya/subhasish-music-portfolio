@@ -8,13 +8,6 @@ import {
   fetchYTChannelContent,
   fetchYTChannelPlayListItems,
 } from "../services/ytService";
-import {
-  fetchArtistTopTracks,
-  generateSpotifyAccessToken,
-} from "../services/spotifyService";
-import Cookies from "universal-cookie";
-import { GenericAxiosError } from "../types";
-import SpotifyTrack from "../types/SpotifyTrack";
 import IndexISRProps from "../types/IndexISRProps";
 import ToolBar from "../components/Utilities/ToolBar";
 import YTVideoResponse from "../types/YTVideoResponse";
@@ -25,8 +18,6 @@ import SkillsetSection from "../components/Utilities/SkillsetSection";
 import PortfolioSection from "../components/Utilities/PortfolioSection";
 import MainSectionsWrapper from "../components/Interfaces/MainSectionsWrapper";
 import IllustrativeExpressions from "../components/Utilities/IllustrativeExpressions";
-
-const cookies = new Cookies();
 
 const Home: NextPage<IndexISRProps> = (props) => {
   const { scrollYProgress } = useScroll();
@@ -92,62 +83,24 @@ const Home: NextPage<IndexISRProps> = (props) => {
 
 export async function getStaticProps() {
   let ytVideos: YTVideoResponse[] = [];
-  let spotifyTracks: SpotifyTrack[] = [];
 
-  const setSortedSpotifyTracks = (tracks: SpotifyTrack[]) => {
-    const sortedTracks = tracks.sort((t1, t2) => {
-      return (t1?.popularity ?? 0) - (t2?.popularity ?? 0);
-    });
-    spotifyTracks = sortedTracks.slice(0, 9);
-  };
-
-  const onArtistTopTrackFetch = async () => {
-    try {
-      const topTracksResponse = await fetchArtistTopTracks();
-      setSortedSpotifyTracks([...topTracksResponse.data.tracks]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const onSpotifyTokenGeneration = async () => {
-    try {
-      const accessTokenResponse = await generateSpotifyAccessToken();
-      cookies.set("_spaToken", accessTokenResponse.data.access_token, {
-        secure: true,
-      });
-      onArtistTopTrackFetch();
-    } catch (err) {}
-  };
-
-  // try {
-  //   const ytChannelResponse = await fetchYTChannelContent();
-  //   const uploadPlayListId =
-  //     ytChannelResponse.data.items[0].contentDetails.relatedPlaylists.uploads;
-  //   const playListContent = await fetchYTChannelPlayListItems(uploadPlayListId);
-  //   const videoIds = playListContent.data.items
-  //     .map((vidContent) => vidContent.contentDetails.videoId)
-  //     .join(",");
-  //   const ytVideosData = await fetchYTVideoContent(videoIds);
-  //   ytVideos = [...ytVideosData.data.items];
-  // } catch (err) {
-  //   console.log(err);
-  // }
-
-  // try {
-  //   const topTracksResponse = await fetchArtistTopTracks();
-  //   setSortedSpotifyTracks([...topTracksResponse.data.tracks]);
-  // } catch (err: GenericAxiosError | any) {
-  //   const statusCode = err?.response?.data?.error?.status;
-  //   if (statusCode >= 400 && statusCode <= 599) {
-  //     onSpotifyTokenGeneration();
-  //   }
-  // }
+  try {
+    const ytChannelResponse = await fetchYTChannelContent();
+    const uploadPlayListId =
+      ytChannelResponse.data.items[0].contentDetails.relatedPlaylists.uploads;
+    const playListContent = await fetchYTChannelPlayListItems(uploadPlayListId);
+    const videoIds = playListContent.data.items
+      .map((vidContent) => vidContent.contentDetails.videoId)
+      .join(",");
+    const ytVideosData = await fetchYTVideoContent(videoIds);
+    ytVideos = [...ytVideosData.data.items];
+  } catch (err) {
+    console.log(err);
+  }
 
   return {
     props: {
       ytVideos,
-      spotifyTracks,
     },
     revalidate: 3600 * 24,
   };

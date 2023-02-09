@@ -10,15 +10,27 @@ import {
 } from "react";
 import { MotionValue, useScroll, useTransform } from "framer-motion";
 
-import { MousePosition, MousePositionAction } from "../../types";
+import {
+  MousePosition,
+  GenericAxiosError,
+  MousePositionAction,
+} from "../../types";
+import Cookies from "universal-cookie";
 import SpotifyCard from "./SpotifyCard";
 import YtCard from "../Interfaces/YtCard";
 import YtPlayer from "../Interfaces/YtPlayer";
 import ArtistPlatforms from "./ArtistPlatforms";
+import SpotifyTrack from "../../types/SpotifyTrack";
 import IndexISRProps from "../../types/IndexISRProps";
 import SpotifyPlayer from "../Interfaces/SpotifyPlayer";
 import YtVideoContent from "../Interfaces/YtVideoContent";
 import SectionWatermark from "../Interfaces/SectionWatermark";
+import {
+  fetchArtistTopTracks,
+  generateSpotifyAccessToken,
+} from "../../services/spotifyService";
+
+const cookies = new Cookies();
 
 const bgCoordinateReducer = (
   state: MousePosition,
@@ -38,7 +50,7 @@ const useParallax = (value: MotionValue<number>) => {
   return useTransform(value, [0, 1], ["-2%", "50%"]);
 };
 
-const PortfolioSection: FC<IndexISRProps> = ({ ytVideos, spotifyTracks }) => {
+const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
   const spotifyTracksRef = useRef<HTMLDivElement>(null);
   const portfolioSectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: spotifyScrollYProgress } = useScroll({
@@ -60,17 +72,57 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos, spotifyTracks }) => {
   );
 
   const [spotifyY, setSpotifyY] = useState<number>(0);
+  const [spotifyTracks, setSpotifyTracks] = useState<SpotifyTrack[]>([]);
   const [activeSpotifyTrack, setActiveSpotifyTrack] = useState<string>("");
-
-  useEffect(() => {
-    setActiveSpotifyTrack(spotifyTracks[0]?.id);
-  }, [spotifyTracks, setActiveSpotifyTrack]);
 
   useEffect(() => {
     spotifyScrollYProgress.onChange((latestSpotifyY) => {
       setSpotifyY(latestSpotifyY);
     });
   }, [setSpotifyY, spotifyScrollYProgress]);
+
+  const setSortedSpotifyTracks = useCallback(
+    (tracks: SpotifyTrack[]) => {
+      const sortedTracks = tracks.sort((t1, t2) => {
+        return (t1?.popularity ?? 0) - (t2?.popularity ?? 0);
+      });
+      setSpotifyTracks(sortedTracks.slice(0, 9));
+      setActiveSpotifyTrack(sortedTracks[0].id);
+    },
+    [setSpotifyTracks, setActiveSpotifyTrack]
+  );
+
+  useEffect(() => {
+    const onArtistTopTrackFetch = async () => {
+      try {
+        const topTracksResponse = await fetchArtistTopTracks();
+        setSortedSpotifyTracks([...topTracksResponse.data.tracks]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const onSpotifyTokenGeneration = async () => {
+      try {
+        const accessTokenResponse = await generateSpotifyAccessToken();
+        cookies.set("_spaToken", accessTokenResponse.data.access_token, {
+          secure: true,
+        });
+        onArtistTopTrackFetch();
+      } catch (err) {}
+    };
+
+    fetchArtistTopTracks()
+      .then((topTracksResponse) => {
+        setSortedSpotifyTracks([...topTracksResponse.data.tracks]);
+      })
+      .catch((err: GenericAxiosError) => {
+        const statusCode = err?.response?.data?.error?.status;
+        if (statusCode >= 400 && statusCode <= 599) {
+          onSpotifyTokenGeneration();
+        }
+      });
+  }, [setSpotifyTracks, setActiveSpotifyTrack, setSortedSpotifyTracks]);
 
   const onYtVideoCardMouseMoveHandler: MouseEventHandler<HTMLDivElement> =
     useCallback((event) => {
