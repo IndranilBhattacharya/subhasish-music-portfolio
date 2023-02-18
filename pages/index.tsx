@@ -29,7 +29,6 @@ const Home: NextPage<IndexISRProps> = (props) => {
 
   const aboutMeSectionRef = useRef<HTMLDivElement>(null);
   const skillSetSectionRef = useRef<HTMLDivElement>(null);
-  const contactMeSectionRef = useRef<HTMLDivElement>(null);
   const portfolioSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,9 +72,6 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <MainSectionsWrapper ref={aboutMeSectionRef} className="w-full h-fit">
           <AboutMeSection />
         </MainSectionsWrapper>
-        <MainSectionsWrapper ref={contactMeSectionRef} className="w-full h-fit">
-          <ContactMeSection />
-        </MainSectionsWrapper>
         <section className="fixed top-0 z-20 right-[4vw] w-2/5 h-screen flex justify-center items-center overflow-hidden">
           <IllustrativeExpressions
             {...{
@@ -83,11 +79,13 @@ const Home: NextPage<IndexISRProps> = (props) => {
               aboutMeRef: aboutMeSectionRef,
               youTubeRef: portfolioSectionRef,
               skillSetRef: skillSetSectionRef,
-              contactMeRef: contactMeSectionRef,
             }}
           />
         </section>
       </main>
+      <footer className="w-full h-screen relative flex flex-col items-center">
+        <ContactMeSection />
+      </footer>
     </div>
   );
 };

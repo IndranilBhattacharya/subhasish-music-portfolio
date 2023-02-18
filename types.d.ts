@@ -13,7 +13,8 @@ interface FCProps {
 }
 
 interface ToolRoute {
-  path: string;
+  path?: string;
+  onClick?: () => void;
   displayName: string;
 }
 
@@ -31,7 +32,6 @@ interface HeroExpRefs extends YtStats {
   youTubeRef: RefObject<HTMLDivElement>;
   aboutMeRef: RefObject<HTMLDivElement>;
   skillSetRef: RefObject<HTMLDivElement>;
-  contactMeRef: RefObject<HTMLDivElement>;
 }
 
 interface YtSvgPath {

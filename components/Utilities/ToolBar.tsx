@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { memo, useEffect, useState } from "react";
 import { BsChatRight } from "react-icons/bs";
 import { motion, useScroll } from "framer-motion";
+import { memo, useEffect, useState } from "react";
+
 import { ToolRoute } from "../../types";
 import officialLogo from "../../assets/icons/subhasish_logo_s.png";
 
@@ -21,7 +22,7 @@ const ToolBar = () => {
 
   const toolbarContentDynamicClasses =
     globalY > 0
-      ? "w-[80%] h-full px-[1%] left-[10%] top-5 bg-gray-300 rounded-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)_,_inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-xl"
+      ? "w-[80%] h-full px-[1%] left-[10%] top-5 bg-gray-300 rounded-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)_,_inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-2xl"
       : "";
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const ToolBar = () => {
                 route.pathname !== path && "text-white/50"
               }`}
             >
-              <Link href={path}>{displayName}</Link>
+              {path && <Link href={path}>{displayName}</Link>}
             </span>
           ))}
         </div>

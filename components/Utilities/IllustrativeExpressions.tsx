@@ -12,7 +12,6 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
   youTubeRef,
   aboutMeRef,
   skillSetRef,
-  contactMeRef,
   subscriberCount,
 }) => {
   const { scrollYProgress: youTubeYProgress } = useScroll({
@@ -90,7 +89,7 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
           }}
         />
       )}
-      {skillsY > 0.1 && aboutMeY <= 0.2 && (
+      {skillsY > 0.1 && aboutMeY <= 0.18 && (
         <SkillsExpression pathProgress={skillsY} />
       )}
     </AnimatePresence>
