@@ -12,6 +12,7 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
   youTubeRef,
   aboutMeRef,
   skillSetRef,
+  contactMeRef,
   subscriberCount,
 }) => {
   const { scrollYProgress: youTubeYProgress } = useScroll({

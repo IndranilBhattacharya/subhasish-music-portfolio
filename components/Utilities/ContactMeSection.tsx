@@ -1,7 +1,7 @@
-import React from "react";
+import { FC, memo } from "react";
 
-const ContactMeSection = () => {
+const ContactMeSection: FC = () => {
   return <div>ContactMeSection</div>;
 };
 
-export default ContactMeSection;
+export default memo(ContactMeSection);
