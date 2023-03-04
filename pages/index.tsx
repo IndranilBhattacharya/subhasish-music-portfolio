@@ -83,7 +83,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
           />
         </section>
       </main>
-      <footer className="w-full h-screen relative flex flex-col items-center">
+      <footer className="mt-32 w-full h-screen relative flex flex-col items-center">
         <ContactMeSection />
       </footer>
     </div>
