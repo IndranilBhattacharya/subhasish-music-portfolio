@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { FC, memo, useRef, useState, useCallback } from "react";
+
 import { YtPlayerProps } from "../../types";
 
 let animationTimeOut: ReturnType<typeof setTimeout>;
