@@ -13,18 +13,21 @@ import SocialHandleLinkSvg from "../Interfaces/SocialHandleLinkSvg";
 const socialPlaforms: SocialMedia[] = [
   {
     logo: BsWhatsapp,
+    bgClass: "whatsapp",
     platformName: "WhatsApp",
     referenceLink: "https://wa.me/917001075627",
   },
   {
     logo: RiFacebookFill,
+    bgClass: "facebook",
     platformName: "Facebook",
-    referenceLink: "",
+    referenceLink: "https://m.facebook.com/subhasishmusic",
   },
   {
     logo: BsInstagram,
+    bgClass: "instagram",
     platformName: "Instagram",
-    referenceLink: "",
+    referenceLink: "https://www.instagram.com/subhasishmusic/",
   },
 ];
 
@@ -61,11 +64,24 @@ const ContactMeSection: FC = () => {
           </div>
           <div className="mt-3 flex w-full">
             <SocialHandleLinkSvg />
-            <div className="mt-8 ml-6 flex flex-col justify-evenly">
+            <div className="mt-8 ml-4 flex flex-col justify-evenly">
               {socialPlaforms.map((p) => (
-                <div key={p.platformName} className="flex gap-6 items-center">
-                  {<p.logo />} {p.platformName}
-                </div>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  key={p.platformName}
+                  href={p.referenceLink}
+                  className={classes["social-link"]}
+                >
+                  <div
+                    className={`${classes[p.bgClass]} ${
+                      classes["social-media"]
+                    }`}
+                  >
+                    <div className={classes["icon"]}>{<p.logo />}</div>
+                  </div>
+                  <span className="z-[55]">{p.platformName}</span>
+                </a>
               ))}
             </div>
           </div>
