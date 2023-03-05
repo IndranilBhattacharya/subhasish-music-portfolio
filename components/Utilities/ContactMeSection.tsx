@@ -1,10 +1,32 @@
 import Image from "next/image";
 import { FC, memo } from "react";
+import { RiFacebookFill } from "react-icons/ri";
 import { SiMinutemailer } from "react-icons/si";
+import { BsWhatsapp, BsInstagram } from "react-icons/bs";
 
+import SocialMedia from "../../types/SocialMedia";
 import HackerEffect from "../Interfaces/HackerEffect";
+import classes from "../../styles/ContactMeSection.module.css";
 import calledOutArrowToEmail from "../../assets/icons/arrow.svg";
 import SocialHandleLinkSvg from "../Interfaces/SocialHandleLinkSvg";
+
+const socialPlaforms: SocialMedia[] = [
+  {
+    logo: BsWhatsapp,
+    platformName: "WhatsApp",
+    referenceLink: "https://wa.me/917001075627",
+  },
+  {
+    logo: RiFacebookFill,
+    platformName: "Facebook",
+    referenceLink: "",
+  },
+  {
+    logo: BsInstagram,
+    platformName: "Instagram",
+    referenceLink: "",
+  },
+];
 
 const ContactMeSection: FC = () => {
   return (
@@ -18,7 +40,7 @@ const ContactMeSection: FC = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            className="external-link w-fit"
+            className={classes["official-mail-link"]}
             href={`mailto:subhasishmusic.business@gmail.com`}
           >
             <HackerEffect text="subhasishmusic.business@gmail.com" />
@@ -39,7 +61,13 @@ const ContactMeSection: FC = () => {
           </div>
           <div className="mt-3 flex w-full">
             <SocialHandleLinkSvg />
-            <div className="flex flex-col"></div>
+            <div className="mt-8 ml-6 flex flex-col justify-evenly">
+              {socialPlaforms.map((p) => (
+                <div key={p.platformName} className="flex gap-6 items-center">
+                  {<p.logo />} {p.platformName}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

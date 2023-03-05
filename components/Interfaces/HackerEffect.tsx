@@ -21,7 +21,7 @@ const HackerEffect: FC<{ text: string }> = ({ text }) => {
             if (index < iteration) {
               return text[index];
             }
-            return alphabets[Math.floor(Math.random() * 26)];
+            return [...alphabets][Math.floor(Math.random() * 26)];
           })
           .join("");
         setDisplayText(interText);
