@@ -14,7 +14,6 @@ interface FCProps {
 
 interface ToolRoute {
   path?: string;
-  onClick?: () => void;
   displayName: string;
 }
 

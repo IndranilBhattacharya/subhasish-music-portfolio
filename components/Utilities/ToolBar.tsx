@@ -10,9 +10,9 @@ import officialLogo from "../../assets/icons/subhasish_logo_s.png";
 
 const toolRoutes: ToolRoute[] = [
   { path: "/", displayName: "Home" },
-  { path: "/my-songs", displayName: "Songs" },
+  { path: "#my-songs", displayName: "Songs" },
   { path: "/samples-store", displayName: "Samples" },
-  { path: "/about-me", displayName: "About Me" },
+  { path: "#about-me", displayName: "About Me" },
 ];
 
 const ToolBar = () => {

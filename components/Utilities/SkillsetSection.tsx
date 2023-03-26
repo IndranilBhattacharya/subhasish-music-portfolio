@@ -142,7 +142,10 @@ const SkillsetSection: FC = () => {
           </div>
         ))}
       </div>
-      <div className="mt-12 sub-head w-full text-2xl font-semibold">
+      <div
+        id="about-me"
+        className="mt-12 sub-head w-full text-2xl font-semibold"
+      >
         Tools I use!
       </div>
       <div className="mt-9 gap-x-14 gap-y-7 flex w-full flex-wrap items-center justify-items-stretch">
