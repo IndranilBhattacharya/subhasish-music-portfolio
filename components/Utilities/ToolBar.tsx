@@ -21,7 +21,7 @@ const ToolBar: FC = () => {
   const { scrollYProgress: globalScrollYProgress } = useScroll();
 
   const toolbarContentDynamicClasses =
-    globalY > 0
+    globalY > 0 && !route?.pathname?.includes("samples-store")
       ? "w-[80%] h-full px-[1%] left-[10%] top-5 bg-gray-300 rounded-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)_,_inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-2xl"
       : "";
 
