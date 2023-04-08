@@ -6,8 +6,8 @@ import useWindowSize from "../../hooks/useWindowSize";
 const mesh: Variants = {
   hidden: { opacity: 0, zIndex: -5 },
   visible: {
-    opacity: 1,
     zIndex: 0,
+    opacity: 1,
     transition: { duration: 1.5 },
   },
 };

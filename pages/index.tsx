@@ -131,6 +131,9 @@ export async function getStaticProps() {
     props: {
       ytStats,
       ytVideos,
+      headers: {
+        "Cache-Control": "max-age=86400",
+      },
     },
     revalidate: 3600 * 24,
   };
