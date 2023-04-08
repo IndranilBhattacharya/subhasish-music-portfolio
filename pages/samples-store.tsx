@@ -1,6 +1,7 @@
 import { memo } from "react";
 import Head from "next/head";
 import { NextPage } from "next";
+import { motion } from "framer-motion";
 import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
 import useWindowSize from "../hooks/useWindowSize";
@@ -8,11 +9,23 @@ import ToolBar from "../components/Utilities/ToolBar";
 import classes from "../styles/SampleStore.module.css";
 import SpaceBoyDeveloper from "../assets/jsons/space-boy-developer.json";
 
+const sampleStorePageAnimationStates = {
+  initial: { opacity: 0 },
+  stable: { opacity: 1 },
+  exit: { opacity: 0 },
+};
+
 const SamplesStore: NextPage = () => {
   const { width: wScreen, height: hScreen } = useWindowSize();
 
   return (
-    <div className="relative overflow-hidden w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center">
+    <motion.div
+      exit="exit"
+      animate="stable"
+      initial="initial"
+      variants={sampleStorePageAnimationStates}
+      className="relative overflow-hidden w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center"
+    >
       <Head>
         <title>Subhasish Music - Samples Store</title>
         <meta
@@ -37,7 +50,7 @@ const SamplesStore: NextPage = () => {
       <div
         className={`absolute -bottom-[35vw] left-[23vw] ${classes["bg-bottom"]}`}
       ></div>
-    </div>
+    </motion.div>
   );
 };
 

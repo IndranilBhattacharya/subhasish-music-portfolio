@@ -1,6 +1,6 @@
 import Head from "next/head";
 import type { NextPage } from "next";
-import { useScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
 import {
@@ -21,6 +21,12 @@ import ContactMeSection from "../components/Utilities/ContactMeSection";
 import MainSectionsWrapper from "../components/Interfaces/MainSectionsWrapper";
 import IllustrativeExpressions from "../components/Utilities/IllustrativeExpressions";
 
+const homePageAnimationStates = {
+  initial: { opacity: 0 },
+  stable: { opacity: 1 },
+  exit: { opacity: 0 },
+};
+
 const Home: NextPage<IndexISRProps> = (props) => {
   const { scrollYProgress } = useScroll();
   const [yPercent, setYPercent] = useState<number>(0);
@@ -40,11 +46,15 @@ const Home: NextPage<IndexISRProps> = (props) => {
   }, [setYPercent, scrollYProgress]);
 
   return (
-    <div
+    <motion.div
+      exit="exit"
+      animate="stable"
+      initial="initial"
       style={{
         backgroundImage: `url(${appBgTexture.src})`,
         backgroundSize: `${yPercent >= 0.005 ? "0%" : "cover"}`,
       }}
+      variants={homePageAnimationStates}
       className="relative w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center bg-no-repeat bg-fixed bg-right-top"
     >
       <Head>
@@ -89,7 +99,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
       <footer className="mt-36 w-full h-[75vh] relative flex flex-col items-center">
         <ContactMeSection />
       </footer>
-    </div>
+    </motion.div>
   );
 };
 
