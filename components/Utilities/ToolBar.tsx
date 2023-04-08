@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { BsChatRight } from "react-icons/bs";
 import { motion, useScroll } from "framer-motion";
-import { memo, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 
 import { ToolRoute } from "../../types";
 import officialLogo from "../../assets/icons/subhasish_logo_s.png";
@@ -15,7 +15,7 @@ const toolRoutes: ToolRoute[] = [
   { path: "#about-me", displayName: "About Me" },
 ];
 
-const ToolBar = () => {
+const ToolBar: FC = () => {
   const route = useRouter();
   const [globalY, setGlobalY] = useState<number>(0);
   const { scrollYProgress: globalScrollYProgress } = useScroll();
@@ -56,7 +56,7 @@ const ToolBar = () => {
             </span>
           ))}
         </div>
-        <Link href="/contact">
+        <Link href="/#contact-me">
           <button className="relative inline-flex items-center justify-start px-5 py-1 overflow-hidden font-semibold transition-all bg-white/20 rounded hover:bg-black group">
             <span className="w-48 h-48 rounded rotate-[-40deg] bg-red-500 absolute bottom-0 left-0 -translate-x-full ease-out duration-500 transition-all translate-y-full mb-9 ml-9 group-hover:ml-0 group-hover:mb-32 group-hover:translate-x-0"></span>
             <span className="relative w-full text-left transition-colors duration-300 ease-in-out flex gap-2 items-center">

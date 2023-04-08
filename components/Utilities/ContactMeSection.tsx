@@ -33,7 +33,7 @@ const socialPlaforms: SocialMedia[] = [
 
 const ContactMeSection: FC = () => {
   return (
-    <div className="w-[77vw] relative flex flex-col">
+    <div id="contact-me" className="w-[77vw] relative flex flex-col">
       <div className="w-full text-4xl font-bold">{`Let's talk business!`}</div>
       <div className="mt-6 text-gray-300 text-sm drop-shadow-2xl flex flex-wrap">
         {`If you're looking for someone to produce or compose songs/music for your project, I'm here to help! I have experience working on a variety of genres and I'm passionate about creating unique and engaging music. Feel free to reach out to me to discuss your project and see how we can work together. Looking forward to connecting with you!`}
