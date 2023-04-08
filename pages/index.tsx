@@ -31,7 +31,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
   const { scrollYProgress } = useScroll();
   const [yPercent, setYPercent] = useState<number>(0);
 
-  const contentClasses = "z-10 w-3/5 relative";
+  const contentClasses = "z-10 w-full lg:w-3/5 relative";
 
   const aboutMeSectionRef = useRef<HTMLDivElement>(null);
   const skillSetSectionRef = useRef<HTMLDivElement>(null);
@@ -55,7 +55,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         backgroundSize: `${yPercent >= 0.005 ? "0%" : "cover"}`,
       }}
       variants={homePageAnimationStates}
-      className="relative w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center bg-no-repeat bg-fixed bg-right-top"
+      className="relative w-full flex flex-col items-center bg-no-repeat bg-fixed bg-right-top overflow-hidden"
     >
       <Head>
         <title>Subhasish Music</title>
@@ -66,7 +66,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToolBar />
-      <main className="w-[77vw] relative flex flex-col items-center">
+      <main className="w-[85vw] lg:w-[77vw] relative flex flex-col items-center">
         <MainSectionsWrapper className={`${contentClasses} h-screen`}>
           <HeroMessage />
         </MainSectionsWrapper>
@@ -85,7 +85,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <MainSectionsWrapper ref={aboutMeSectionRef} className="w-full h-fit">
           <AboutMeSection />
         </MainSectionsWrapper>
-        <section className="fixed top-0 z-20 right-[4vw] w-2/5 h-screen flex justify-center items-center overflow-hidden">
+        <section className="fixed top-0 z-20 right-[4vw] hidden lg:w-2/5 h-screen lg:flex justify-center items-center overflow-hidden">
           <IllustrativeExpressions
             {...{
               ...props.ytStats,
