@@ -1,5 +1,5 @@
-import { FC, memo } from "react";
 import Image from "next/image";
+import { FC, memo } from "react";
 import { FaPlay } from "react-icons/fa";
 import SpotifyTrack from "../../types/SpotifyTrack";
 

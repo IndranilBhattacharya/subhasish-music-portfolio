@@ -67,7 +67,9 @@ const HeroMessage: FC = () => {
       </motion.div>
       <div className="absolute left-0 bottom-20 h-10 gap-4 flex items-center ">
         <AnimatedMouseScroll className="h-full aspect-square" />
-        <span className="font-semibold">Explore my work..</span>
+        <span id="my-songs" className="font-semibold">
+          Explore my work..
+        </span>
       </div>
     </div>
   );

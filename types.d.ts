@@ -13,7 +13,7 @@ interface FCProps {
 }
 
 interface ToolRoute {
-  path: string;
+  path?: string;
   displayName: string;
 }
 
@@ -21,10 +21,16 @@ interface SSRProps {
   ytChannelData: any;
 }
 
-interface HeroExpRefs {
+interface YtStats {
+  viewCount: number;
+  videoCount: number;
+  subscriberCount: number;
+}
+
+interface HeroExpRefs extends YtStats {
   youTubeRef: RefObject<HTMLDivElement>;
-  skillSetRef: RefObject<HTMLDivElement>;
   aboutMeRef: RefObject<HTMLDivElement>;
+  skillSetRef: RefObject<HTMLDivElement>;
 }
 
 interface YtSvgPath {
@@ -32,11 +38,7 @@ interface YtSvgPath {
   youTubeSvgPathProgress: number;
 }
 
-interface YtExpInfo extends YtSvgPath {
-  viewCount: number;
-  videoCount: number;
-  subscriberCount: number;
-}
+interface YtExpInfo extends YtStats, YtSvgPath {}
 
 interface GenericAxiosResponse {
   config: any;

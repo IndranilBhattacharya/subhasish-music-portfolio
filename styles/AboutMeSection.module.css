@@ -24,8 +24,7 @@
 }
 
 .animate-mask {
-  animation-delay: 1.25s;
-  animation: bwToColor 1.5s steps(4) forwards;
+  animation: bwToColor 1.5s steps(4) 0.5s forwards;
 }
 
 @keyframes bwToColor {

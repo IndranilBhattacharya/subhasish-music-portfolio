@@ -1,12 +1,13 @@
 import { FC, memo } from "react";
+import Spline from "@splinetool/react-spline";
 import { motion, Variants } from "framer-motion";
 import useWindowSize from "../../hooks/useWindowSize";
 
 const mesh: Variants = {
   hidden: { opacity: 0, zIndex: -5 },
   visible: {
-    opacity: 1,
     zIndex: 0,
+    opacity: 1,
     transition: { duration: 1.5 },
   },
 };
@@ -15,16 +16,13 @@ const ThreeDMeshForHero: FC = () => {
   const wondowSize = useWindowSize();
 
   return (
-    <motion.iframe
-      loading="lazy"
-      key="meshBlob"
+    <motion.div
       variants={mesh}
-      height={wondowSize.width}
-      width={wondowSize.width * 0.5}
       exit={{ display: "none", zIndex: -5 }}
-      title="Abstract 3D Spectrum Visualizer Mesh Blob"
-      src="https://my.spline.design/subhasishportfolio-46056df1861346778738189edf51a3e7/"
-    ></motion.iframe>
+      style={{ height: wondowSize.width, width: wondowSize.width * 0.5 }}
+    >
+      <Spline scene="https://prod.spline.design/Ir9aazIH2TogyEoF/scene.splinecode" />
+    </motion.div>
   );
 };
 

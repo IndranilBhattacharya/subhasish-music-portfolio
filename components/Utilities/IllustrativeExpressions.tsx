@@ -1,24 +1,18 @@
 import { FC, memo, useEffect, useState } from "react";
 import { AnimatePresence, useScroll } from "framer-motion";
 
+import { HeroExpRefs } from "../../types";
 import YtExpression from "./YtExpression";
 import SkillsExpression from "./SkillsExpression";
-import { HeroExpRefs, YtExpInfo } from "../../types";
-import { fetchYTChannelStats } from "../../services/ytService";
 import ThreeDMeshForHero from "../Interfaces/ThreeDMeshForHero";
 
-const initYtInfo: YtExpInfo = {
-  viewCount: 0,
-  videoCount: 0,
-  subscriberCount: 0,
-  youTubeSvgPathProgress: 0,
-  youTubeSvgLogoFill: "#ffff",
-};
-
 const IllustrativeExpressions: FC<HeroExpRefs> = ({
+  viewCount,
+  videoCount,
   youTubeRef,
-  skillSetRef,
   aboutMeRef,
+  skillSetRef,
+  subscriberCount,
 }) => {
   const { scrollYProgress: youTubeYProgress } = useScroll({
     target: youTubeRef,
@@ -38,7 +32,6 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
   const [aboutMeY, setAboutMeY] = useState<number>(0);
 
   const [initHeroExpression, setInitHeroExpression] = useState(<></>);
-  const [ytChannelInfo, setYtChannelInfo] = useState<YtExpInfo>(initYtInfo);
 
   const youTubeSvgPathProgress = Math.max(
     skillsY > 0 ? youTubeY - skillsY * 7 : youTubeY * 3,
@@ -70,7 +63,6 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
     setSkillsY,
     setAboutMeY,
     setYouTubeY,
-
     setInitHeroExpression,
   ]);
 
@@ -83,39 +75,21 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
     return () => clearTimeout(meshLoadTimeout);
   }, [youTubeY, setInitHeroExpression]);
 
-  useEffect(() => {
-    const onChannelStatsFetch = async () => {
-      try {
-        const ytChannelStatsResponse = await fetchYTChannelStats();
-        const ytRawStat = ytChannelStatsResponse.data.items[0].statistics;
-        setYtChannelInfo((prevInfo) => {
-          return {
-            ...prevInfo,
-            viewCount: +ytRawStat.viewCount,
-            videoCount: +ytRawStat.videoCount,
-            subscriberCount: +ytRawStat.subscriberCount,
-          };
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    onChannelStatsFetch();
-  }, [setYtChannelInfo]);
-
   return (
     <AnimatePresence>
       {youTubeY <= 0.05 && initHeroExpression}
       {youTubeY > 0.05 && skillsY <= 0.1 && (
         <YtExpression
-          viewCount={ytChannelInfo.viewCount}
-          videoCount={ytChannelInfo.videoCount}
-          youTubeSvgLogoFill={youTubeSvgLogoFill}
-          subscriberCount={ytChannelInfo.subscriberCount}
-          youTubeSvgPathProgress={youTubeSvgPathProgress}
+          {...{
+            viewCount,
+            videoCount,
+            subscriberCount,
+            youTubeSvgLogoFill,
+            youTubeSvgPathProgress,
+          }}
         />
       )}
-      {skillsY > 0.1 && aboutMeY <= 0.2 && (
+      {skillsY > 0.1 && aboutMeY <= 0.18 && (
         <SkillsExpression pathProgress={skillsY} />
       )}
     </AnimatePresence>

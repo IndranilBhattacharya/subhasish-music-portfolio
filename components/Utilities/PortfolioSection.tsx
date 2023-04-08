@@ -8,31 +8,27 @@ import {
   useCallback,
   MouseEventHandler,
 } from "react";
-import Cookies from "universal-cookie";
 import { MotionValue, useScroll, useTransform } from "framer-motion";
+
 import {
   MousePosition,
   GenericAxiosError,
   MousePositionAction,
 } from "../../types";
-import {
-  fetchYTVideoContent,
-  fetchYTChannelContent,
-  fetchYTChannelPlayListItems,
-} from "../../services/ytService";
-import {
-  fetchArtistTopTracks,
-  generateSpotifyAccessToken,
-} from "../../services/spotifyService";
+import Cookies from "universal-cookie";
 import SpotifyCard from "./SpotifyCard";
 import YtCard from "../Interfaces/YtCard";
 import YtPlayer from "../Interfaces/YtPlayer";
 import ArtistPlatforms from "./ArtistPlatforms";
 import SpotifyTrack from "../../types/SpotifyTrack";
+import IndexISRProps from "../../types/IndexISRProps";
 import SpotifyPlayer from "../Interfaces/SpotifyPlayer";
-import YTVideoResponse from "../../types/YTVideoResponse";
 import YtVideoContent from "../Interfaces/YtVideoContent";
 import SectionWatermark from "../Interfaces/SectionWatermark";
+import {
+  fetchArtistTopTracks,
+  generateSpotifyAccessToken,
+} from "../../services/spotifyService";
 
 const cookies = new Cookies();
 
@@ -54,7 +50,7 @@ const useParallax = (value: MotionValue<number>) => {
   return useTransform(value, [0, 1], ["-2%", "50%"]);
 };
 
-const PortfolioSection: FC = () => {
+const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
   const spotifyTracksRef = useRef<HTMLDivElement>(null);
   const portfolioSectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: spotifyScrollYProgress } = useScroll({
@@ -76,7 +72,6 @@ const PortfolioSection: FC = () => {
   );
 
   const [spotifyY, setSpotifyY] = useState<number>(0);
-  const [ytVideos, setYtVideos] = useState<YTVideoResponse[]>([]);
   const [spotifyTracks, setSpotifyTracks] = useState<SpotifyTrack[]>([]);
   const [activeSpotifyTrack, setActiveSpotifyTrack] = useState<string>("");
 
@@ -85,28 +80,6 @@ const PortfolioSection: FC = () => {
       setSpotifyY(latestSpotifyY);
     });
   }, [setSpotifyY, spotifyScrollYProgress]);
-
-  useEffect(() => {
-    const onChannelInfoFetch = async () => {
-      try {
-        const ytChannelResponse = await fetchYTChannelContent();
-        const uploadPlayListId =
-          ytChannelResponse.data.items[0].contentDetails.relatedPlaylists
-            .uploads;
-        const playListContent = await fetchYTChannelPlayListItems(
-          uploadPlayListId
-        );
-        const videoIds = playListContent.data.items
-          .map((vidContent) => vidContent.contentDetails.videoId)
-          .join(",");
-        const ytVideosData = await fetchYTVideoContent(videoIds);
-        setYtVideos([...ytVideosData.data.items]);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    onChannelInfoFetch();
-  }, [setYtVideos]);
 
   const setSortedSpotifyTracks = useCallback(
     (tracks: SpotifyTrack[]) => {

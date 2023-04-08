@@ -2,7 +2,7 @@ import { TypeAnimation } from "react-type-animation";
 import { FC, memo, useEffect, useRef, useState } from "react";
 import { MotionValue, useScroll, useTransform } from "framer-motion";
 
-import classes from "./AboutMeSection.module.css";
+import classes from "../../styles/AboutMeSection.module.css";
 import SectionWatermark from "../Interfaces/SectionWatermark";
 
 const useParallax = (value: MotionValue<number>) => {
