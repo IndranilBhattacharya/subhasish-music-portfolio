@@ -5,13 +5,14 @@ import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
 import useWindowSize from "../hooks/useWindowSize";
 import ToolBar from "../components/Utilities/ToolBar";
+import classes from "../styles/SampleStore.module.css";
 import SpaceBoyDeveloper from "../assets/jsons/space-boy-developer.json";
 
 const SamplesStore: NextPage = () => {
   const { width: wScreen, height: hScreen } = useWindowSize();
 
   return (
-    <div className="w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center">
+    <div className="relative overflow-hidden w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center">
       <Head>
         <title>Subhasish Music - Samples Store</title>
         <meta
@@ -29,6 +30,13 @@ const SamplesStore: NextPage = () => {
       >
         <Controls visible={false} />
       </Player>
+      <div className="mt-8 mb-10 text-gray-200 flex flex-wrap text-lg">
+        This page is under development for a better user experience. Stay tuned
+        for exciting updates!
+      </div>
+      <div
+        className={`absolute -bottom-[35vw] left-[23vw] ${classes["bg-bottom"]}`}
+      ></div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 .bg-bottom {
-  width: 440px;
-  height: 440px;
-  border-radius: 15rem;
+  @apply w-[50vw] h-[50vw] rotate-90 rounded-full;
+  filter: blur(12rem);
+  background-blend-mode: normal, normal, normal, normal, normal, normal;
   background: radial-gradient(
       77.73% 77.73% at 98.52% 96.25%,
       #f98bda 0%,
@@ -21,6 +21,4 @@
       rgba(254, 216, 255, 0) 100%
     ),
     linear-gradient(153.07deg, #8177f3 6.37%, rgba(255, 230, 166, 0) 83.82%);
-  background-blend-mode: normal, normal, normal, normal, normal, normal;
-  filter: blur(50px);
 }
