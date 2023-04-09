@@ -174,7 +174,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
       <SpotifyPlayer trackId={activeSpotifyTrack} spotifyYProgress={spotifyY} />
       <div
         ref={spotifyTracksRef}
-        className="mt-5 w-full h-fit grid gap-5 grid-cols-3"
+        className="mt-5 w-full h-fit grid gap-5 grid-cols-2 lg:grid-cols-3"
       >
         {spotifyTracks.map((track) => (
           <SpotifyCard
