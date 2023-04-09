@@ -27,6 +27,7 @@ const AboutMeSection: FC = () => {
 
   return (
     <div
+      id="about"
       ref={aboutMeContainerRef}
       className="mt-32 w-full h-fit flex flex-col relative"
     >

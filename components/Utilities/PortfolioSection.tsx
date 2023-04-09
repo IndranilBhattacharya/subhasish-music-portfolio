@@ -98,7 +98,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
         const topTracksResponse = await fetchArtistTopTracks();
         setSortedSpotifyTracks([...topTracksResponse.data.tracks]);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 

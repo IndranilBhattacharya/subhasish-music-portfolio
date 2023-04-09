@@ -70,7 +70,7 @@ const HeroMessage: FC = () => {
         className="mt-8 mb-10 text-gray-200 flex flex-wrap text-lg"
       >
         I can help you compose and produce music that can touch the souls of
-        your audiences.{" "}
+        your audiences.
         <span className="hidden lg:flex flex-wrap">
           You can also get music samples as per your need from the Samples store
           section.

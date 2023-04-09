@@ -98,7 +98,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
           />
         </section>
       </main>
-      <footer className="mt-36 pb-[5vh] lg:pb-0 w-full h-fit lg:h-[80vh] relative flex flex-col items-center">
+      <footer className="mt-36 pb-[10vw] lg:pb-0 w-full h-fit lg:h-[80vh] relative flex flex-col items-center">
         <ContactMeSection />
       </footer>
     </motion.div>
@@ -124,7 +124,7 @@ export async function getStaticProps() {
     const ytVideosData = await fetchYTVideoContent(videoIds);
     ytVideos = [...ytVideosData.data.items];
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   try {
@@ -136,7 +136,7 @@ export async function getStaticProps() {
       subscriberCount: +ytRawStat.subscriberCount,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   return {

@@ -62,7 +62,7 @@ const ContactMeSection: FC = () => {
             </div>
           </div>
         </div>
-        <div className="pl-4 w-full lg:w-1/2 flex flex-col">
+        <div className="lg:pl-4 w-full lg:w-1/2 flex flex-col">
           <div className="pt-2 text-gray-300 text-sm drop-shadow-2xl flex flex-wrap">
             {`And also, if you're on WhatsApp, Facebook or Instagram, let's connect there too!`}
           </div>

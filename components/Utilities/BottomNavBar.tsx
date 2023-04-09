@@ -20,8 +20,12 @@ const BottomNavBar: FC = () => {
     },
   ];
   const homeNav = bottomNavRoutes.find((r) => r?.displayName === "Home");
+  const aboutMeNav = bottomNavRoutes.find((r) => r?.displayName === "About Me");
   if (homeNav) {
     homeNav.path = "/#tool-top";
+  }
+  if (aboutMeNav) {
+    aboutMeNav.path = "/#about";
   }
 
   const bottomNavbar = (
