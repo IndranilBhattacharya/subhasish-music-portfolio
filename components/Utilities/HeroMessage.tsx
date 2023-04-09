@@ -1,7 +1,10 @@
 import { FC, memo } from "react";
 import { motion } from "framer-motion";
+import { Player, Controls } from "@lottiefiles/react-lottie-player";
+
 import DynamicBg from "../Interfaces/DynamicBg";
 import AnimatedMouseScroll from "../Interfaces/AnimatedMouseScroll";
+import SwipeUpAction from "../../assets/jsons/swipe-up-for-more.json";
 
 const message = {
   hidden: { opacity: 0 },
@@ -19,7 +22,7 @@ const sentence = {
 
 const HeroMessage: FC = () => {
   return (
-    <div className="relative w-full h-full flex flex-col pt-12 lg:pt-7 lg:justify-center pb-[15vh]">
+    <div className="relative w-full h-full flex flex-col pt-[5vh] lg:pt-7 lg:justify-center pb-[15vh]">
       <motion.div
         initial="hidden"
         variants={message}
@@ -65,7 +68,23 @@ const HeroMessage: FC = () => {
       >
         {`I can help you compose and produce music that can touch the souls of your audiences. You can also get music samples as per your need from the Samples store section.`}
       </motion.div>
-      <div className="absolute left-0 bottom-[19vh] lg:bottom-7 h-10 gap-4 flex items-center">
+      <motion.div
+        custom={6}
+        initial="hidden"
+        variants={sentence}
+        whileInView="visible"
+        className="mt-2 mb-5 w-full flex justify-center opacity-75 lg:hidden"
+      >
+        <Player
+          loop
+          autoplay
+          src={SwipeUpAction}
+          style={{ height: "20vw", width: "20vw" }}
+        >
+          <Controls visible={false} />
+        </Player>
+      </motion.div>
+      <div className="absolute left-0 bottom-7 h-10 gap-4 hidden lg:flex items-center">
         <AnimatedMouseScroll className="h-full aspect-square" />
         <span id="my-songs" className="font-semibold">
           Explore my work..
