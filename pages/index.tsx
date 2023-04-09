@@ -60,7 +60,16 @@ const Home: NextPage<IndexISRProps> = (props) => {
     >
       <Head>
         <title>Subhasish Music</title>
-        <meta property="og:image" content="/icons/icon-180x180.png" />
+        <meta property="og:title" content="Subhasish Music Official" />
+        <meta
+          property="og:image"
+          content="https://subhasishmusic.vercel.app/icons/icon.png"
+        />
+        <meta property="og:url" content="https://subhasishmusic.vercel.app/" />
+        <meta
+          property="og:description"
+          content="Subhasish is a well-versed music composer in a variety of musical styles and genres. Subhasish has produced several hit musics that resonates with audiences of all ages, has been my strength. Subhasish is also a skilled singer, with a powerful voice that is well-suited to a wide range of musical styles. "
+        />
         <meta
           name="description"
           content="Subhasish is a well-versed music composer in a variety of musical styles and genres. Subhasish has produced several hit musics that resonates with audiences of all ages, has been my strength. Subhasish is also a skilled singer, with a powerful voice that is well-suited to a wide range of musical styles. "
