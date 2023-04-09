@@ -42,7 +42,7 @@ const AboutMeSection: FC = () => {
           <div className={classes["bw-background"]}></div>
         </div>
         <div className={classes.content}>
-          <section className="w-[78%] lg:w-full flex flex-col lg:block text-3xl font-semibold">
+          <section className="w-[78%] lg:w-full flex flex-col lg:block text-2xl lg:text-3xl font-semibold">
             Greetings, I am Subhasish Chakraborty, a
             <TypeAnimation
               sequence={[

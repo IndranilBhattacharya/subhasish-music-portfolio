@@ -25,7 +25,7 @@ const BottomNavBar: FC = () => {
   }
 
   const bottomNavbar = (
-    <footer className="z-30 fixed left-[5%] bottom-0 h-[14vmin] w-[90%] bg-gray-300 rounded-t-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-xl">
+    <footer className="z-[999] fixed left-[5%] bottom-0 h-[14vmin] w-[90%] bg-gray-300 rounded-t-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-xl">
       <div className="w-full h-full px-[2%] flex items-center justify-between text-lg font-semibold">
         {bottomNavRoutes.map(({ displayName, path }) => (
           <span
