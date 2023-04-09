@@ -108,7 +108,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
           />
         </section>
       </main>
-      <footer className="mt-36 pb-[10vw] lg:pb-0 w-full h-fit lg:h-[80vh] relative flex flex-col items-center">
+      <footer className="mt-36 pb-[10vw] lg:pb-0 w-full h-fit lg:h-screen relative flex flex-col items-center">
         <ContactMeSection />
       </footer>
     </motion.div>
