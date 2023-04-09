@@ -1,7 +1,10 @@
 import { FC, memo } from "react";
 import { motion } from "framer-motion";
+import { Player, Controls } from "@lottiefiles/react-lottie-player";
+
 import DynamicBg from "../Interfaces/DynamicBg";
 import AnimatedMouseScroll from "../Interfaces/AnimatedMouseScroll";
+import SwipeUpAction from "../../assets/jsons/swipe-up-for-more.json";
 
 const message = {
   hidden: { opacity: 0 },
@@ -19,7 +22,10 @@ const sentence = {
 
 const HeroMessage: FC = () => {
   return (
-    <div className="relative w-full h-full flex flex-col justify-center pb-[15vh]">
+    <div
+      id="hero-top"
+      className="relative w-full h-full flex flex-col pt-[5vh] lg:pt-7 lg:justify-center pb-[15vh]"
+    >
       <motion.div
         initial="hidden"
         variants={message}
@@ -63,14 +69,33 @@ const HeroMessage: FC = () => {
         whileInView="visible"
         className="mt-8 mb-10 text-gray-200 flex flex-wrap text-lg"
       >
-        {`I can help you compose and produce music that can touch the souls of your audiences. You can also get music samples as per your need from the Samples store section.`}
-      </motion.div>
-      <div className="absolute left-0 bottom-20 h-10 gap-4 flex items-center ">
-        <AnimatedMouseScroll className="h-full aspect-square" />
-        <span id="my-songs" className="font-semibold">
-          Explore my work..
+        I can help you compose and produce music that can touch the souls of
+        your audiences.
+        <span className="hidden lg:flex flex-wrap">
+          You can also get music samples as per your need from the Samples store
+          section.
         </span>
+      </motion.div>
+      <motion.div
+        custom={6}
+        initial="hidden"
+        variants={sentence}
+        className="w-full flex lg:hidden justify-center opacity-75"
+      >
+        <Player
+          loop
+          autoplay
+          src={SwipeUpAction}
+          style={{ height: "10vh", width: "10vh" }}
+        >
+          <Controls visible={false} />
+        </Player>
+      </motion.div>
+      <div className="absolute left-0 bottom-7 h-10 gap-4 hidden lg:flex items-center">
+        <AnimatedMouseScroll className="h-full aspect-square" />
+        <span className="font-semibold">Explore my work..</span>
       </div>
+      <span id="my-songs"></span>
     </div>
   );
 };

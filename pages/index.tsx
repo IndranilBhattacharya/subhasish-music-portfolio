@@ -13,6 +13,7 @@ import IndexISRProps from "../types/IndexISRProps";
 import ToolBar from "../components/Utilities/ToolBar";
 import YTVideoResponse from "../types/YTVideoResponse";
 import HeroMessage from "../components/Utilities/HeroMessage";
+import BottomNavBar from "../components/Utilities/BottomNavBar";
 import appBgTexture from "../assets/images/hero_bg_texture.svg";
 import AboutMeSection from "../components/Utilities/AboutMeSection";
 import SkillsetSection from "../components/Utilities/SkillsetSection";
@@ -31,7 +32,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
   const { scrollYProgress } = useScroll();
   const [yPercent, setYPercent] = useState<number>(0);
 
-  const contentClasses = "z-10 w-3/5 relative";
+  const contentClasses = "z-10 w-full lg:w-3/5 relative";
 
   const aboutMeSectionRef = useRef<HTMLDivElement>(null);
   const skillSetSectionRef = useRef<HTMLDivElement>(null);
@@ -55,7 +56,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         backgroundSize: `${yPercent >= 0.005 ? "0%" : "cover"}`,
       }}
       variants={homePageAnimationStates}
-      className="relative w-[calc(100vw_-_0.5rem)] min-h-screen flex flex-col items-center bg-no-repeat bg-fixed bg-right-top"
+      className="relative w-full flex flex-col items-center bg-no-repeat bg-fixed bg-center lg:bg-right-top overflow-hidden"
     >
       <Head>
         <title>Subhasish Music</title>
@@ -66,7 +67,8 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToolBar />
-      <main className="w-[77vw] relative flex flex-col items-center">
+      <BottomNavBar />
+      <main className="w-[85vw] lg:w-[77vw] relative flex flex-col items-center">
         <MainSectionsWrapper className={`${contentClasses} h-screen`}>
           <HeroMessage />
         </MainSectionsWrapper>
@@ -85,7 +87,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <MainSectionsWrapper ref={aboutMeSectionRef} className="w-full h-fit">
           <AboutMeSection />
         </MainSectionsWrapper>
-        <section className="fixed top-0 z-20 right-[4vw] w-2/5 h-screen flex justify-center items-center overflow-hidden">
+        <section className="fixed top-0 z-20 right-[4vw] hidden lg:w-2/5 h-screen lg:flex justify-center items-center overflow-hidden">
           <IllustrativeExpressions
             {...{
               ...props.ytStats,
@@ -96,7 +98,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
           />
         </section>
       </main>
-      <footer className="mt-36 w-full h-[75vh] relative flex flex-col items-center">
+      <footer className="mt-36 pb-[10vw] lg:pb-0 w-full h-fit lg:h-[80vh] relative flex flex-col items-center">
         <ContactMeSection />
       </footer>
     </motion.div>
@@ -122,7 +124,7 @@ export async function getStaticProps() {
     const ytVideosData = await fetchYTVideoContent(videoIds);
     ytVideos = [...ytVideosData.data.items];
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   try {
@@ -134,7 +136,7 @@ export async function getStaticProps() {
       subscriberCount: +ytRawStat.subscriberCount,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   return {

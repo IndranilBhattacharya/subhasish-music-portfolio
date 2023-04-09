@@ -5,17 +5,16 @@
 @tailwind components;
 
 * {
-  @apply box-border bg-none outline-none;
-}
-
-html,
-body,
-#next {
-  @apply m-0 p-0 bg-black text-white font-body text-[1.03vmax];
+  @apply bg-none outline-none;
 }
 
 html {
-  @apply h-screen snap-y snap-mandatory overflow-y-scroll;
+  @apply h-full;
+}
+
+body {
+  overflow-y: overlay;
+  @apply bg-black text-white font-body lg:text-[calc(16px_+_0.1vw)] overflow-x-hidden;
 }
 
 ::selection {
@@ -63,11 +62,11 @@ a.external-link:hover::before {
 }
 
 .glass-card {
-  @apply overflow-hidden  bg-slate-50 rounded-xl bg-opacity-5 
+  @apply overflow-hidden bg-slate-50 rounded-xl bg-opacity-5 
   shadow-[inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-xl;
 }
 .glass-card.yt-card {
-  @apply first-of-type:col-span-2;
+  @apply lg:first-of-type:col-span-2;
 }
 
 .spotify-card {

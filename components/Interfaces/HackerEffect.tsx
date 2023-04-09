@@ -35,7 +35,10 @@ const HackerEffect: FC<{ text: string }> = ({ text }) => {
   );
 
   return (
-    <div className="text-3xl font-semibold" onMouseOver={onMouseHoverHandler}>
+    <div
+      className="text-[5vw] lg:text-xl xl:text-3xl font-semibold"
+      onMouseOver={onMouseHoverHandler}
+    >
       {displayText}
     </div>
   );

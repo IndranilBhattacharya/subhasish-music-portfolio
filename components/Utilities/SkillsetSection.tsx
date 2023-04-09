@@ -69,20 +69,20 @@ const musicGenres: { name: string; description: string }[] = [
 const tools: MusicTool[] = [
   {
     name: "Logic Pro",
-    widthClass: "w-1/3",
+    widthClass: "w-full lg:w-1/3",
     avatar: logicProLogo,
     url: "https://www.apple.com/in/logic-pro/",
   },
   {
     avatar: ableton,
-    widthClass: "w-1/3",
+    widthClass: "w-full lg:w-1/3",
     name: "Ableton Live",
     url: "https://www.ableton.com/en/",
   },
   {
     name: "FL Studio",
     avatar: flStudioLogo,
-    widthClass: "w-[10%]",
+    widthClass: "w-full lg:w-[10%]",
     url: "https://www.image-line.com/",
   },
 ];
@@ -116,7 +116,7 @@ const SkillsetSection: FC = () => {
       <div className="mt-12 sub-head w-full text-2xl font-semibold">
         Genres I produce!
       </div>
-      <div className="mt-9 gap-x-5 gap-y-8 w-full h-fit grid  grid-cols-3">
+      <div className="mt-9 w-full h-fit grid lg:grid-cols-3 lg:gap-x-5 gap-y-8">
         {musicGenres.map((genre) => (
           <div key={genre.name} className="gap-2 flex flex-col">
             <div className="w-full font-semibold">{genre.name}</div>
@@ -129,7 +129,7 @@ const SkillsetSection: FC = () => {
       <div className="mt-12 sub-head w-full text-2xl font-semibold">
         Instruments I love!
       </div>
-      <div className="mt-9 gap-5 flex flex-wrap">
+      <div className="mt-9 gap-5 flex flex-col lg:flex-row lg:flex-wrap">
         {instruments.map((instrument) => (
           <div
             key={instrument.name}
@@ -148,7 +148,7 @@ const SkillsetSection: FC = () => {
       >
         Tools I use!
       </div>
-      <div className="mt-9 gap-x-14 gap-y-7 flex w-full flex-wrap items-center justify-items-stretch">
+      <div className="mt-9 flex w-full flex-col lg:flex-row lg:flex-wrap lg:gap-x-14 gap-y-7 items-center justify-items-stretch">
         {tools.map((tool) => (
           <a
             target="_blank"

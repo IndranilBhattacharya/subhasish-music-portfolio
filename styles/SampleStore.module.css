@@ -1,5 +1,5 @@
 .bg-bottom {
-  @apply w-[50vw] h-[50vw] rotate-90 rounded-full;
+  @apply w-full h-full lg:w-[50vw] lg:h-[50vw] rotate-90 rounded-full;
   filter: blur(12rem);
   background-blend-mode: normal, normal, normal, normal, normal, normal;
   background: radial-gradient(

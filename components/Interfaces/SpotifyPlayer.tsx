@@ -2,8 +2,8 @@ import { FC, memo } from "react";
 import { motion, Variants } from "framer-motion";
 
 const playerState: Variants = {
-  hidden: { width: "66.5%", height: 80 },
-  visible: { width: "100%", height: 352 },
+  minified: { height: 80 },
+  expandaed: { height: 352 },
 };
 
 const SpotifyPlayer: FC<{ trackId: string; spotifyYProgress: number }> = ({
@@ -13,16 +13,19 @@ const SpotifyPlayer: FC<{ trackId: string; spotifyYProgress: number }> = ({
   return (
     <div
       className={`${
-        spotifyYProgress < 1 ? "sticky" : ""
-      } top-[6rem] z-30 mt-8 flex w-full items-center justify-center`}
+        spotifyYProgress > 0 && spotifyYProgress < 1
+          ? "fixed top-2 lg:top-[5vh] left-[7.5vw] lg:left-[19.2vw]"
+          : ""
+      } z-30 mt-8 w-[85vw] ${
+        spotifyYProgress > 0 ? "lg:w-[27vw]" : "lg:w-[46.2vw]"
+      }`}
     >
       <motion.iframe
-        width="100%"
         loading="lazy"
         variants={playerState}
         transition={{ duration: 0.3 }}
-        className="rounded-xl shadow-2xl shadow-black"
-        animate={spotifyYProgress > 0 ? "hidden" : "visible"}
+        className="w-full rounded-xl shadow-2xl shadow-black"
+        animate={spotifyYProgress > 0 ? "minified" : "expandaed"}
         src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator`}
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       />
