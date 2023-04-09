@@ -29,7 +29,10 @@ const ToolBar: FC = () => {
   }, [globalScrollYProgress, setGlobalY]);
 
   const desktopToolBar = (
-    <header className="lg:z-30 lg:fixed lg:top-2 w-[85vw] lg:w-[77vw] h-14 flex lg:justify-center">
+    <header
+      id="tool-top"
+      className="lg:z-30 lg:fixed lg:top-2 w-[85vw] lg:w-[77vw] h-14 flex lg:justify-center"
+    >
       <motion.div
         layout
         transition={{ duration: 0.15 }}
@@ -45,8 +48,10 @@ const ToolBar: FC = () => {
           {routes.map(({ displayName, path }) => (
             <span
               key={displayName}
-              className={`px-5 py-1 rounded hover:bg-white/20 transition ease-in-out duration-150 ${
-                route.pathname !== path && "text-white/50"
+              className={`px-5 py-1 rounded text-white/50 hover:bg-white/20 transition ease-in-out duration-150 ${
+                (route.asPath === path ||
+                  (route.asPath === "/" && displayName === "Home")) &&
+                "text-white"
               }`}
             >
               {path && <Link href={path}>{displayName}</Link>}

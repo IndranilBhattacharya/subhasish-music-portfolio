@@ -13,6 +13,7 @@ html {
 }
 
 body {
+  overflow-y: overlay;
   @apply bg-black text-white font-body lg:text-[calc(16px_+_0.1vw)] overflow-x-hidden;
 }
 

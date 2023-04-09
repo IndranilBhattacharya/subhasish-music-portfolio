@@ -22,7 +22,10 @@ const sentence = {
 
 const HeroMessage: FC = () => {
   return (
-    <div className="relative w-full h-full flex flex-col pt-[5vh] lg:pt-7 lg:justify-center pb-[15vh]">
+    <div
+      id="hero-top"
+      className="relative w-full h-full flex flex-col pt-[5vh] lg:pt-7 lg:justify-center pb-[15vh]"
+    >
       <motion.div
         initial="hidden"
         variants={message}
@@ -66,30 +69,33 @@ const HeroMessage: FC = () => {
         whileInView="visible"
         className="mt-8 mb-10 text-gray-200 flex flex-wrap text-lg"
       >
-        {`I can help you compose and produce music that can touch the souls of your audiences. You can also get music samples as per your need from the Samples store section.`}
+        I can help you compose and produce music that can touch the souls of
+        your audiences.{" "}
+        <span className="hidden lg:flex flex-wrap">
+          You can also get music samples as per your need from the Samples store
+          section.
+        </span>
       </motion.div>
       <motion.div
         custom={6}
         initial="hidden"
         variants={sentence}
-        whileInView="visible"
-        className="mt-2 mb-5 w-full flex justify-center opacity-75 lg:hidden"
+        className="w-full flex lg:hidden justify-center opacity-75"
       >
         <Player
           loop
           autoplay
           src={SwipeUpAction}
-          style={{ height: "20vw", width: "20vw" }}
+          style={{ height: "10vh", width: "10vh" }}
         >
           <Controls visible={false} />
         </Player>
       </motion.div>
       <div className="absolute left-0 bottom-7 h-10 gap-4 hidden lg:flex items-center">
         <AnimatedMouseScroll className="h-full aspect-square" />
-        <span id="my-songs" className="font-semibold">
-          Explore my work..
-        </span>
+        <span className="font-semibold">Explore my work..</span>
       </div>
+      <span id="my-songs"></span>
     </div>
   );
 };
