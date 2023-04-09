@@ -73,7 +73,7 @@ a.external-link:hover::before {
   @apply relative first-of-type:col-span-2 first-of-type:row-span-2;
 }
 .spotify-card:first-of-type:after {
-  @apply absolute top-3 left-1/2 -translate-x-1/2 px-2.5 rounded-md shadow-lg content-['Trending'] flex bg-red-500 text-white items-center justify-center;
+  @apply z-20 absolute top-3 left-1/2 -translate-x-1/2 px-2.5 rounded-md shadow-lg content-['Trending'] flex bg-red-500 text-white items-center justify-center;
 }
 
 svg.hero-mask {
