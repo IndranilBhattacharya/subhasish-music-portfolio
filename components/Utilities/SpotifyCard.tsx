@@ -21,7 +21,10 @@ const SpotifyCard: FC<{
           src={track.album.images?.[0]?.url ?? ""}
         />
       </div>
-      <button className="p-3.5 flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 shadow-lg rounded-full justify-center items-center bg-white text-black scale-0 transition duration-300 group-hover:scale-100">
+      <button
+        aria-label="Play Spotify Music"
+        className="p-3.5 flex absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 shadow-lg rounded-full justify-center items-center bg-white text-black scale-0 transition duration-300 group-hover:scale-100"
+      >
         <FaPlay size={20} />
       </button>
     </div>
