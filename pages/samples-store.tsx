@@ -7,6 +7,7 @@ import { Player, Controls } from "@lottiefiles/react-lottie-player";
 import useWindowSize from "../hooks/useWindowSize";
 import ToolBar from "../components/Utilities/ToolBar";
 import classes from "../styles/SampleStore.module.css";
+import BottomNavBar from "../components/Utilities/BottomNavBar";
 import SpaceBoyDeveloper from "../assets/jsons/space-boy-developer.json";
 
 const sampleStorePageAnimationStates = {
@@ -35,6 +36,7 @@ const SamplesStore: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToolBar />
+      <BottomNavBar />
       <Player
         loop
         autoplay

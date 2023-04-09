@@ -13,6 +13,7 @@ import IndexISRProps from "../types/IndexISRProps";
 import ToolBar from "../components/Utilities/ToolBar";
 import YTVideoResponse from "../types/YTVideoResponse";
 import HeroMessage from "../components/Utilities/HeroMessage";
+import BottomNavBar from "../components/Utilities/BottomNavBar";
 import appBgTexture from "../assets/images/hero_bg_texture.svg";
 import AboutMeSection from "../components/Utilities/AboutMeSection";
 import SkillsetSection from "../components/Utilities/SkillsetSection";
@@ -66,6 +67,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToolBar />
+      <BottomNavBar />
       <main className="w-[85vw] lg:w-[77vw] relative flex flex-col items-center">
         <MainSectionsWrapper className={`${contentClasses} h-screen`}>
           <HeroMessage />
