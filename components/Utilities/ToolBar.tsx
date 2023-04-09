@@ -6,6 +6,7 @@ import { motion, useScroll } from "framer-motion";
 import { FC, memo, useEffect, useState } from "react";
 
 import { ToolRoute } from "../../types";
+import useWindowSize from "../../hooks/useWindowSize";
 import officialLogo from "../../assets/icons/subhasish_logo_s.png";
 
 const toolRoutes: ToolRoute[] = [
@@ -17,6 +18,7 @@ const toolRoutes: ToolRoute[] = [
 
 const ToolBar: FC = () => {
   const route = useRouter();
+  const [wScreen, hScreen] = useWindowSize();
   const [globalY, setGlobalY] = useState<number>(0);
   const { scrollYProgress: globalScrollYProgress } = useScroll();
 

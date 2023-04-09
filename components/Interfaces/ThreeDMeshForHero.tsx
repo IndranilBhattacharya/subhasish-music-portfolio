@@ -13,13 +13,13 @@ const mesh: Variants = {
 };
 
 const ThreeDMeshForHero: FC = () => {
-  const wondowSize = useWindowSize();
+  const [width, _] = useWindowSize();
 
   return (
     <motion.div
       variants={mesh}
       exit={{ display: "none", zIndex: -5 }}
-      style={{ height: wondowSize.width, width: wondowSize.width * 0.5 }}
+      style={{ height: width, width: width * 0.5 }}
     >
       <Spline scene="https://prod.spline.design/Ir9aazIH2TogyEoF/scene.splinecode" />
     </motion.div>

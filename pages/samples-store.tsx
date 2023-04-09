@@ -16,7 +16,7 @@ const sampleStorePageAnimationStates = {
 };
 
 const SamplesStore: NextPage = () => {
-  const { width: wScreen, height: hScreen } = useWindowSize();
+  const [wScreen, hScreen] = useWindowSize();
 
   return (
     <motion.div
