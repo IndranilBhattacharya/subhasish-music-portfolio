@@ -7,6 +7,7 @@ import ableton from "../../assets/icons/ableton.png";
 import flStudioLogo from "../../assets/icons/fl_studio.png";
 import logicProLogo from "../../assets/icons/logic_pro.png";
 import SectionWatermark from "../Interfaces/SectionWatermark";
+import reaperAWLogo from "../../assets/icons/reaper_audio_workstation.png";
 
 const instruments: SkillItem[] = [
   { name: "Piano", theme: "bg-violet-500/75", background: "bg-violet-500/20" },
@@ -69,21 +70,27 @@ const musicGenres: { name: string; description: string }[] = [
 const tools: MusicTool[] = [
   {
     name: "Logic Pro",
-    widthClass: "w-full lg:w-1/3",
+    widthClass: "w-full lg:w-[25%]",
     avatar: logicProLogo,
     url: "https://www.apple.com/in/logic-pro/",
   },
   {
     avatar: ableton,
-    widthClass: "w-full lg:w-1/3",
+    widthClass: "w-full lg:w-[25%]",
     name: "Ableton Live",
     url: "https://www.ableton.com/en/",
   },
   {
     name: "FL Studio",
     avatar: flStudioLogo,
-    widthClass: "w-full lg:w-[10%]",
+    widthClass: "w-[30%] lg:w-[30%]",
     url: "https://www.image-line.com/",
+  },
+  {
+    name: "Reaper Digital Audio Workstation",
+    avatar: reaperAWLogo,
+    widthClass: "w-[30%] lg:w-[30%]",
+    url: "https://www.reaper.fm/",
   },
 ];
 
@@ -148,8 +155,8 @@ const SkillsetSection: FC = () => {
       >
         Tools I use!
       </div>
-      <div className="mt-9 flex w-full flex-col lg:flex-row lg:flex-wrap lg:gap-x-14 gap-y-7 items-center justify-items-stretch">
-        {tools.map((tool) => (
+      <div className="mt-9 flex w-full flex-col lg:flex-row lg:flex-wrap lg:gap-x-14 gap-y-12 lg:gap-y-7 items-center justify-items-stretch">
+        {tools.slice(0, 2).map((tool) => (
           <a
             target="_blank"
             rel="noreferrer"
@@ -163,6 +170,22 @@ const SkillsetSection: FC = () => {
             </div>
           </a>
         ))}
+        <div className="flex-1 flex gap-x-14 gap-y-7 items-center">
+          {tools.slice(2).map((tool) => (
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={tool.url}
+              key={tool.name}
+              title={tool.name}
+              className={`${tool.widthClass} decoration-transparent`}
+            >
+              <div className="relative w-full">
+                <Image alt="S" objectFit="contain" src={tool.avatar} />
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
