@@ -32,8 +32,8 @@ const AboutMeSection: FC = () => {
     >
       <SectionWatermark top={aboutMeY} content={"About Me"} />
       <div className="w-full text-4xl font-bold">About Me</div>
-      <div className="w-full h-fit overflow-hidden gap-8 flex items-center">
-        <div className="w-[52%] h-[85vh] relative overflow-hidden">
+      <div className="w-full h-fit mt-12 lg:mt-0 overflow-hidden gap-8 flex flex-col lg:flex-row lg:items-center">
+        <div className="hidden lg:block w-[52%] h-[85vh] relative overflow-hidden">
           <div
             className={`${classes["mask-animator"]} ${
               y > 0.35 ? classes["animate-mask"] : ""
@@ -42,7 +42,7 @@ const AboutMeSection: FC = () => {
           <div className={classes["bw-background"]}></div>
         </div>
         <div className={classes.content}>
-          <section className="text-3xl font-semibold">
+          <section className="w-[78%] lg:w-full flex flex-col lg:block text-3xl font-semibold">
             Greetings, I am Subhasish Chakraborty, a
             <TypeAnimation
               sequence={[
@@ -56,7 +56,7 @@ const AboutMeSection: FC = () => {
               wrapper="span"
               cursor={true}
               repeat={Infinity}
-              className="w-fit text-red-500"
+              className="w-full lg:w-fit text-red-500"
             />
           </section>
           <section className="mt-4 text-gray-300">
