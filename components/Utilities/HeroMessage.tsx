@@ -19,7 +19,7 @@ const sentence = {
 
 const HeroMessage: FC = () => {
   return (
-    <div className="relative w-full h-full flex flex-col justify-center pb-[15vh]">
+    <div className="relative w-full h-full flex flex-col lg:justify-center pb-[15vh]">
       <motion.div
         initial="hidden"
         variants={message}
@@ -65,7 +65,7 @@ const HeroMessage: FC = () => {
       >
         {`I can help you compose and produce music that can touch the souls of your audiences. You can also get music samples as per your need from the Samples store section.`}
       </motion.div>
-      <div className="absolute left-0 bottom-20 h-10 gap-4 flex items-center ">
+      <div className="absolute left-0 bottom-[25vh] lg:bottom-20 h-10 gap-4 flex items-center">
         <AnimatedMouseScroll className="h-full aspect-square" />
         <span id="my-songs" className="font-semibold">
           Explore my work..
