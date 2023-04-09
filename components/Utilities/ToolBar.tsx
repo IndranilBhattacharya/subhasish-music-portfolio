@@ -22,7 +22,7 @@ const ToolBar: FC = () => {
 
   const toolbarContentDynamicClasses =
     globalY > 0 && !route?.pathname?.includes("samples-store")
-      ? "w-[80%] px-[1%] left-[10%] top-5 bg-gray-300 rounded-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)_,_inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-2xl"
+      ? "w-[80%] px-[1%] bg-gray-300 rounded-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)_,_inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-2xl"
       : "w-full";
 
   useEffect(() => {
@@ -32,11 +32,11 @@ const ToolBar: FC = () => {
   }, [globalScrollYProgress, setGlobalY]);
 
   const desktopToolBar = (
-    <header className={`z-30 sticky top-0 w-[77vw] h-14`}>
+    <header className="z-30 fixed top-2 w-[77vw] h-14 flex justify-center">
       <motion.div
         layout
         transition={{ duration: 0.15 }}
-        className={`h-full absolute left-0 top-0 flex items-center justify-between ${toolbarContentDynamicClasses}`}
+        className={`h-full flex items-center justify-between ${toolbarContentDynamicClasses}`}
       >
         <div className="flex items-center w-fit">
           <div className="relative w-8">

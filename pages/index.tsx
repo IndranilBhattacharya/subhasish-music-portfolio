@@ -55,7 +55,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
         backgroundSize: `${yPercent >= 0.005 ? "0%" : "cover"}`,
       }}
       variants={homePageAnimationStates}
-      className="relative w-full flex flex-col items-center bg-no-repeat bg-fixed bg-right-top overflow-hidden"
+      className="relative w-full flex flex-col items-center bg-no-repeat bg-fixed bg-center lg:bg-right-top overflow-hidden"
     >
       <Head>
         <title>Subhasish Music</title>
