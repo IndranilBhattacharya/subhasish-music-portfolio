@@ -38,7 +38,7 @@ const ContactMeSection: FC = () => {
       className="w-[85vw] lg:w-[77vw] relative flex flex-col"
     >
       <div className="w-full text-4xl font-bold">{`Let's talk business!`}</div>
-      <div className="mt-6 text-gray-300 text-sm drop-shadow-2xl flex flex-wrap">
+      <div className="mt-6 text-gray-300 drop-shadow-2xl flex flex-wrap">
         {`If you're looking for someone to produce or compose songs/music for your project, I'm here to help! I have experience working on a variety of genres and I'm passionate about creating unique and engaging music. Feel free to reach out to me to discuss your project and see how we can work together. Looking forward to connecting with you!`}
       </div>
       <div className="mt-10 flex flex-col lg:flex-row w-full">
@@ -63,7 +63,7 @@ const ContactMeSection: FC = () => {
           </div>
         </div>
         <div className="lg:pl-4 w-full lg:w-1/2 flex flex-col">
-          <div className="pt-2 text-gray-300 text-sm drop-shadow-2xl flex flex-wrap">
+          <div className="pt-2 text-gray-300 drop-shadow-2xl flex flex-wrap">
             {`And also, if you're on WhatsApp, Facebook or Instagram, let's connect there too!`}
           </div>
           <div className="mt-3 flex w-full">
