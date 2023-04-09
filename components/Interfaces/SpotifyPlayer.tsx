@@ -24,6 +24,7 @@ const SpotifyPlayer: FC<{ trackId: string; spotifyYProgress: number }> = ({
         loading="lazy"
         variants={playerState}
         transition={{ duration: 0.3 }}
+        title="Spotify Embedded Music Track Player"
         className="w-full rounded-xl shadow-2xl shadow-black"
         animate={spotifyYProgress > 0 ? "minified" : "expandaed"}
         src={`https://open.spotify.com/embed/track/${trackId}?utm_source=generator`}

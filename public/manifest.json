@@ -1,56 +1,33 @@
 {
-  "name": "Subhasish Music",
   "short_name": "Subhasish",
+  "name": "Subhasish Music",
   "icons": [
     {
-      "src": "/pwaicons/icon-180x180.png",
-      "sizes": "180x180",
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/pwaicons/icon-152x152.png",
-      "sizes": "152x152",
+      "src": "/icons/icon-256x256.png",
+      "sizes": "256x256.png",
       "type": "image/png"
     },
     {
-      "src": "/pwaicons/icon-144x144.png",
-      "sizes": "144x144",
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
       "type": "image/png"
     },
     {
-      "src": "/pwaicons/icon-120x120.png",
-      "sizes": "120x120",
-      "type": "image/png"
-    },
-    {
-      "src": "/pwaicons/icon-114x114.png",
-      "sizes": "114x114",
-      "type": "image/png"
-    },
-    {
-      "src": "/pwaicons/icon-76x76.png",
-      "sizes": "76x76",
-      "type": "image/png"
-    },
-    {
-      "src": "/pwaicons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "/pwaicons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "/pwaicons/icon-57x57.png",
-      "sizes": "57x57",
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ],
+  "scope": "/",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#ef4444 ",
-  "background_color": "#000000"
+  "background_color": "#000000",
+  "description": "Official Music Portfolio Website of Subhasish Chakraborty"
 }

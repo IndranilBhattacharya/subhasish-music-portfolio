@@ -60,6 +60,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
     >
       <Head>
         <title>Subhasish Music</title>
+        <meta property="og:image" content="/icons/icon-180x180.png" />
         <meta
           name="description"
           content="Subhasish is a well-versed music composer in a variety of musical styles and genres. Subhasish has produced several hit musics that resonates with audiences of all ages, has been my strength. Subhasish is also a skilled singer, with a powerful voice that is well-suited to a wide range of musical styles. "
