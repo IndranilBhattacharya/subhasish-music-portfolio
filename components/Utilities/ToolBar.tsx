@@ -5,16 +5,9 @@ import { BsChatRight } from "react-icons/bs";
 import { motion, useScroll } from "framer-motion";
 import { FC, memo, useEffect, useState } from "react";
 
-import { ToolRoute } from "../../types";
+import routes from "../../constants/app.routes";
 import useWindowSize from "../../hooks/useWindowSize";
 import officialLogo from "../../assets/icons/subhasish_logo_s.png";
-
-const toolRoutes: ToolRoute[] = [
-  { path: "/", displayName: "Home" },
-  { path: "/#my-songs", displayName: "Songs" },
-  { path: "/samples-store", displayName: "Samples" },
-  { path: "/#about-me", displayName: "About Me" },
-];
 
 const ToolBar: FC = () => {
   const route = useRouter();
@@ -49,7 +42,7 @@ const ToolBar: FC = () => {
           <span className="uppercase text-sm font-extrabold">ubhasish</span>
         </div>
         <div className="hidden lg:flex items-center justify-evenly text-lg font-semibold gap-5">
-          {toolRoutes.map(({ displayName, path }) => (
+          {routes.map(({ displayName, path }) => (
             <span
               key={displayName}
               className={`px-5 py-1 rounded hover:bg-white/20 transition ease-in-out duration-150 ${
