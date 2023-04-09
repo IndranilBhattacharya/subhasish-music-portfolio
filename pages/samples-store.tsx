@@ -45,12 +45,12 @@ const SamplesStore: NextPage = () => {
       >
         <Controls visible={false} />
       </Player>
-      <div className="mt-8 mb-10 text-gray-200 flex flex-wrap text-lg">
+      <section className="lg:mt-8 mb-10 w-full text-center text-lg text-gray-200">
         This page is under development for a better user experience. Stay tuned
         for exciting updates!
-      </div>
+      </section>
       <div
-        className={`absolute -bottom-[35vw] left-[23vw] ${classes["bg-bottom"]}`}
+        className={`absolute -bottom-1/2 left-0 lg:-bottom-[35vw] lg:left-[23vw] ${classes["bg-bottom"]}`}
       ></div>
     </motion.div>
   );
