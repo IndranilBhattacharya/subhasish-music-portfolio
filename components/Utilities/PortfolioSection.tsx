@@ -84,7 +84,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
   const setSortedSpotifyTracks = useCallback(
     (tracks: SpotifyTrack[]) => {
       const sortedTracks = tracks.sort((t1, t2) => {
-        return (t1?.popularity ?? 0) - (t2?.popularity ?? 0);
+        return (t2?.popularity ?? 0) - (t1?.popularity ?? 0);
       });
       setSpotifyTracks(sortedTracks.slice(0, 9));
       setActiveSpotifyTrack(sortedTracks[0].id);
@@ -174,7 +174,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
       <SpotifyPlayer trackId={activeSpotifyTrack} spotifyYProgress={spotifyY} />
       <div
         ref={spotifyTracksRef}
-        className="mt-5 w-full h-fit grid gap-5 grid-cols-3"
+        className="mt-5 w-full h-fit grid gap-5 grid-cols-2 lg:grid-cols-3"
       >
         {spotifyTracks.map((track) => (
           <SpotifyCard

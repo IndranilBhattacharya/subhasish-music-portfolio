@@ -48,10 +48,11 @@ const ToolBar: FC = () => {
           {routes.map(({ displayName, path }) => (
             <span
               key={displayName}
-              className={`px-5 py-1 rounded text-white/50 hover:bg-white/20 transition ease-in-out duration-150 ${
-                (route.asPath === path ||
-                  (route.asPath === "/" && displayName === "Home")) &&
-                "text-white"
+              className={`px-5 py-1 rounded hover:bg-white/20 transition ease-in-out duration-150 ${
+                route.asPath === path ||
+                (route.asPath === "/" && displayName === "Home")
+                  ? "text-white"
+                  : "text-white/50"
               }`}
             >
               {path && <Link href={path}>{displayName}</Link>}
