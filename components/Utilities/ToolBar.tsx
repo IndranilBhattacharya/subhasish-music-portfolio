@@ -28,6 +28,8 @@ const ToolBar: FC = () => {
     });
   }, [globalScrollYProgress, setGlobalY]);
 
+  console.log(route);
+
   const desktopToolBar = (
     <header
       id="tool-top"
