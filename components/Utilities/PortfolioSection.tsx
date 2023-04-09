@@ -140,7 +140,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
   return (
     <div
       ref={portfolioSectionRef}
-      className="mt-32 w-full h-fit flex flex-col relative"
+      className="mt-16 lg:mt-32 w-full h-fit flex flex-col relative"
     >
       <SectionWatermark top={myReleasesY} content={"My Releases"} />
       <div className="w-full text-4xl font-bold">My Releases</div>
@@ -156,7 +156,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
       </div>
       <div
         onMouseMove={onYtVideoCardMouseMoveHandler}
-        className="mt-7 w-full h-fit grid gap-5 grid-cols-2"
+        className="mt-7 w-full h-fit grid gap-5 lg:grid-cols-2"
       >
         {ytVideos.map((video) => (
           <YtCard key={video.id} x={mousePosition.x} y={mousePosition.y}>

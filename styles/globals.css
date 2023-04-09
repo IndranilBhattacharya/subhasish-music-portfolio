@@ -62,11 +62,11 @@ a.external-link:hover::before {
 }
 
 .glass-card {
-  @apply overflow-hidden  bg-slate-50 rounded-xl bg-opacity-5 
+  @apply overflow-hidden bg-slate-50 rounded-xl bg-opacity-5 
   shadow-[inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-xl;
 }
 .glass-card.yt-card {
-  @apply first-of-type:col-span-2;
+  @apply lg:first-of-type:col-span-2;
 }
 
 .spotify-card {
