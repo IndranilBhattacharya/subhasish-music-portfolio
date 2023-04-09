@@ -29,6 +29,16 @@ const SamplesStore: NextPage = () => {
     >
       <Head>
         <title>Subhasish Music - Samples Store</title>
+        <meta property="og:title" content="Subhasish Music Official" />
+        <meta
+          property="og:image"
+          content="https://subhasishmusic.vercel.app/icons/icon.png"
+        />
+        <meta property="og:url" content="https://subhasishmusic.vercel.app/" />
+        <meta
+          property="og:description"
+          content="The sound sample store page is under development. Soon, it'll be available to public and you'll be able to purchase those samples that can be incorporated in your project easily."
+        />
         <meta
           name="description"
           content="The sound sample store page is under development. Soon, it'll be available to public and you'll be able to purchase those samples that can be incorporated in your project easily."
