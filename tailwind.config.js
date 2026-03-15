@@ -7,6 +7,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        "2k": "2048px",
+        "4k": "3840px",
+        "8k": "7680px",
+      },
       fontFamily: {
         body: ["Ubuntu", "sans-serif"],
       },

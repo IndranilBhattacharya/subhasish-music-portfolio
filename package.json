@@ -8,6 +8,9 @@
     "build": "next build",
     "start": "next start"
   },
+  "engines": {
+    "node": "24.x"
+  },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@splinetool/react-spline": "^2.2.5",
