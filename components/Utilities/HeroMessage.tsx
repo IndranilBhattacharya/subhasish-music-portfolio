@@ -1,7 +1,15 @@
 import { FC, memo } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
+const Player = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
+  { ssr: false }
+);
+const Controls = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Controls),
+  { ssr: false }
+);
 import DynamicBg from "../Interfaces/DynamicBg";
 import AnimatedMouseScroll from "../Interfaces/AnimatedMouseScroll";
 import SwipeUpAction from "../../assets/jsons/swipe-up-for-more.json";

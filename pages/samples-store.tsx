@@ -1,9 +1,17 @@
 import { memo } from "react";
 import Head from "next/head";
 import { NextPage } from "next";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
+const Player = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
+  { ssr: false }
+);
+const Controls = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Controls),
+  { ssr: false }
+);
 import useWindowSize from "../hooks/useWindowSize";
 import ToolBar from "../components/Utilities/ToolBar";
 import classes from "../styles/SampleStore.module.css";
