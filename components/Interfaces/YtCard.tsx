@@ -20,7 +20,7 @@ const YtCard: FC<CardProps> = ({ x, y, children }) => {
   return (
     <div
       ref={cardRef}
-      className="glass-card yt-card bg-slate-50 bg-opacity-5 flex flex-col h-fit"
+      className="glass-card yt-card bg-slate-50 bg-opacity-5 flex flex-col h-fit transform-gpu transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] rounded-2xl overflow-hidden"
       style={{
         background: `radial-gradient(
         30rem circle at ${localX}px ${localY}px,

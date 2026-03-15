@@ -156,7 +156,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
       </div>
       <div
         onMouseMove={onYtVideoCardMouseMoveHandler}
-        className="mt-7 w-full h-fit grid gap-5 lg:grid-cols-2"
+        className="mt-7 w-full h-fit grid gap-5 lg:grid-cols-2 2k:grid-cols-3 4k:grid-cols-4"
       >
         {ytVideos.map((video) => (
           <YtCard key={video.id} x={mousePosition.x} y={mousePosition.y}>
@@ -174,7 +174,7 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
       <SpotifyPlayer trackId={activeSpotifyTrack} spotifyYProgress={spotifyY} />
       <div
         ref={spotifyTracksRef}
-        className="mt-5 w-full h-fit grid gap-5 grid-cols-2 lg:grid-cols-3"
+        className="mt-5 w-full h-fit grid gap-5 grid-cols-2 lg:grid-cols-3 2k:grid-cols-4 4k:grid-cols-5"
       >
         {spotifyTracks.map((track) => (
           <SpotifyCard

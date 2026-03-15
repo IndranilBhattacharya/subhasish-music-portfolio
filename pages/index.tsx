@@ -78,7 +78,7 @@ const Home: NextPage<IndexISRProps> = (props) => {
       </Head>
       <ToolBar />
       <BottomNavBar />
-      <main className="w-[85vw] lg:w-[77vw] relative flex flex-col items-center">
+      <main className="w-[85vw] lg:w-[77vw] 2k:w-[65vw] max-w-[2000px] relative flex flex-col items-center">
         <MainSectionsWrapper className={`${contentClasses} h-screen`}>
           <HeroMessage />
         </MainSectionsWrapper>

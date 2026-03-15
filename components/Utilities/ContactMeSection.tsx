@@ -35,7 +35,7 @@ const ContactMeSection: FC = () => {
   return (
     <div
       id="contact-me"
-      className="w-[85vw] lg:w-[77vw] relative flex flex-col"
+      className="w-[85vw] lg:w-[77vw] 2k:w-[65vw] max-w-[2000px] relative flex flex-col mb-10"
     >
       <div className="w-full text-4xl font-bold">{`Let's talk business!`}</div>
       <div className="mt-6 text-gray-300 drop-shadow-2xl flex flex-wrap">
@@ -46,14 +46,16 @@ const ContactMeSection: FC = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            className={classes["official-mail-link"]}
+            className={`${classes["official-mail-link"]} group inline-block max-w-[85vw] lg:max-w-[35vw] 4k:max-w-full`}
             href={`mailto:subhasishmusic.business@gmail.com`}
           >
-            <HackerEffect text="subhasishmusic.business@gmail.com" />
+            <div className="max-w-full overflow-hidden text-ellipsis break-all whitespace-normal lg:whitespace-nowrap transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.02] origin-left">
+              <HackerEffect text="subhasishmusic.business@gmail.com" />
+            </div>
           </a>
 
-          <div className="absolute top-14 right-[60%]">
-            <div className="relative w-16 rotate-6">
+          <div className="hidden lg:block absolute top-[4rem] left-[1rem]">
+            <div className="relative w-16 rotate-6 z-10">
               <Image alt="" objectFit="contain" src={calledOutArrowToEmail} />
               <div className="text-sm lg:text-base gap-2 flex items-center text-gray-400 -rotate-6 w-max absolute lg:-bottom-[5%] -left-[10%] lg:left-full">
                 <SiMinutemailer />
