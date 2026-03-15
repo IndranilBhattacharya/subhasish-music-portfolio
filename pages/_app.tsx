@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <Component {...pageProps} key={router.pathname} />
     </AnimatePresence>
   );
