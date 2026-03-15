@@ -1,0 +1,110 @@
+/* ========================================
+   Animated Mouse Scroll – Pure CSS
+   A glowing, pulsing mouse icon with a 
+   scrolling dot and bouncing chevrons.
+   ======================================== */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeInUp 1s ease forwards;
+}
+
+/* --- Mouse body --- */
+.mouse {
+  width: 28px;
+  height: 46px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+/* --- Scroll dot / wheel indicator --- */
+.scrollDot {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 4px;
+  height: 8px;
+  margin-left: -2px;
+  background: white;
+  border-radius: 4px;
+  animation: scrollDown 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* --- Chevron arrows beneath the mouse --- */
+.chevrons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.chevron {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+  transform: rotate(45deg);
+  animation: chevronBounce 1.8s ease-in-out infinite;
+}
+
+.chevron:nth-child(1) {
+  margin-bottom: -6px;
+  animation-delay: 0s;
+}
+
+.chevron:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+/* ========================================
+   Keyframe Animations
+   ======================================== */
+
+/* Scroll dot travels down and fades out */
+@keyframes scrollDown {
+  0% {
+    top: 8px;
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 30px;
+    opacity: 0;
+  }
+}
+
+/* Chevrons bounce downward */
+@keyframes chevronBounce {
+  0% {
+    opacity: 0;
+    transform: rotate(45deg) translate(-4px, -4px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+}
+
+/* Wrapper entrance */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
