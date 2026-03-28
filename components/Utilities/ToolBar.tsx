@@ -17,8 +17,7 @@ const ToolBar: FC = () => {
 
   const toolbarContentDynamicClasses =
     globalY > 0 &&
-    wScreen >= 1024 &&
-    !route?.pathname?.includes("samples-store")
+    wScreen >= 1024
       ? "w-[80%] px-[1%] bg-gray-300 rounded-xl bg-opacity-10 shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_5%)_,_inset_0_-1px_0_0_hsl(0deg_0%_100%_/_5%)] backdrop-filter backdrop-blur-2xl"
       : "w-full";
 
