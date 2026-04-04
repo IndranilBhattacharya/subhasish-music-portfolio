@@ -12,6 +12,7 @@
     "node": "24.x"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^5.1.0",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@splinetool/react-spline": "^2.2.5",
     "@splinetool/runtime": "^0.9.210",
@@ -24,6 +25,7 @@
     "react-icons": "^4.6.0",
     "react-tooltip": "^5.10.5",
     "react-type-animation": "^2.1.2",
+    "resend": "^6.10.0",
     "stripe": "^21.0.1",
     "universal-cookie": "^4.0.4"
   },

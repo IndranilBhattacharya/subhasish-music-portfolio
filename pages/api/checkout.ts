@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { product_id, currency } = req.body;
+    const { product_id, currency, customer_name, customer_email } = req.body;
 
     if (!product_id || !currency) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -55,30 +55,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         ],
         mode: "payment",
+        // Stripe Checkout natively collects email
+        customer_email: customer_email || undefined,
         success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/samples-store/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/samples-store/cancel`,
+        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/samples-store`,
         metadata: {
           product_id: product.id,
           currency: "USD",
+          customer_name: customer_name || "",
         },
       });
 
       return res.status(200).json({ url: session.url });
     } else if (currency === "INR") {
+      // Build customer object — Razorpay will pre-fill these fields on the payment page
+      const customer: any = {};
+      if (customer_name) customer.name = customer_name;
+      if (customer_email) customer.email = customer_email;
+
       const paymentLink = await razorpay.paymentLink.create({
         amount: Math.round(price * 100),
         currency: "INR",
         accept_partial: false,
         description: `Payment for ${product.name}`,
-        customer: {
-          name: "Guest",
-          email: "guest@example.com",
+        customer,
+        notify: {
+          email: !!customer_email, // Send Razorpay's own receipt if email is provided
+          sms: false,
         },
-        notify: { email: false, sms: false },
         reminder_enable: false,
         notes: {
           product_id: product.id,
           currency: "INR",
+          customer_name: customer_name || "",
+          customer_email: customer_email || "",
         },
         callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/samples-store/success`,
         callback_method: "get",

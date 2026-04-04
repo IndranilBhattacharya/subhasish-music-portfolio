@@ -35,6 +35,7 @@ CREATE TABLE public.licenses (
   order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE,
   license_key UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
   status TEXT DEFAULT 'active',
+  fingerprints TEXT[] DEFAULT '{}', -- Device fingerprints that are authorized to re-download
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

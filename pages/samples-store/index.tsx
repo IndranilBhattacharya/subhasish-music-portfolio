@@ -3,14 +3,14 @@ import Head from "next/head";
 import { GetServerSideProps, NextPage } from "next";
 import { motion } from "framer-motion";
 
-import ToolBar from "../components/Utilities/ToolBar";
-import BottomNavBar from "../components/Utilities/BottomNavBar";
-import classes from "../styles/SampleStore.module.css";
+import ToolBar from "../../components/Utilities/ToolBar";
+import BottomNavBar from "../../components/Utilities/BottomNavBar";
+import classes from "../../styles/SampleStore.module.css";
 
-import { supabaseAdmin } from "../lib/supabase/admin";
-import CurrencyToggle from "../components/store/CurrencyToggle";
-import HeroSection from "../components/store/HeroSection";
-import ProductGrid from "../components/store/ProductGrid";
+import { supabaseAdmin } from "../../lib/supabase/admin";
+import CurrencyToggle from "../../components/store/CurrencyToggle";
+import HeroSection from "../../components/store/HeroSection";
+import ProductGrid from "../../components/store/ProductGrid";
 
 interface Product {
   id: string;
