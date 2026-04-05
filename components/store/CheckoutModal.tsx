@@ -25,12 +25,22 @@ export default function CheckoutModal({
   const [customerEmail, setCustomerEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const emailRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen && emailRef.current) {
-      setTimeout(() => emailRef.current?.focus(), 300);
+    if (isOpen && nameRef.current) {
+      setTimeout(() => nameRef.current?.focus(), 300);
     }
+  }, [isOpen]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,108 +87,104 @@ export default function CheckoutModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[92vw] max-w-md"
           >
-            <div className="bg-zinc-900 border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-              {/* Glow */}
-              <div className="absolute -top-16 -right-16 w-48 h-48 bg-indigo-500/15 rounded-full blur-[80px] pointer-events-none" />
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
+              {/* Accent line */}
+              <div className="h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500" />
 
-              {/* Close button */}
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors p-1"
-              >
-                <X size={20} />
-              </button>
-
-              {/* Header */}
-              <h3 className="text-xl font-bold text-white mb-1">
-                Checkout
-              </h3>
-              <p className="text-sm text-gray-400 mb-6">
-                Purchasing{" "}
-                <span className="text-indigo-300 font-semibold">{productName}</span>
-                {" "}for{" "}
-                <span className="text-white font-bold">
-                  {currencySymbol}{price}
-                </span>
-              </p>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Name */}
-                <div>
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">
-                    Full Name
-                  </label>
-                  <div className="relative">
-                    <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
-                    <input
-                      type="text"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="John Doe"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
-                    />
+              <div className="p-7">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1">Checkout</h3>
+                    <p className="text-sm text-zinc-500">
+                      <span className="text-zinc-300 font-medium">{productName}</span>
+                      <span className="mx-1.5 text-zinc-700">&middot;</span>
+                      <span className="text-white font-semibold">{currencySymbol}{price}</span>
+                    </p>
                   </div>
+                  <button
+                    onClick={onClose}
+                    className="text-zinc-600 hover:text-white transition-colors p-1 -mr-1 -mt-1"
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
 
-                {/* Email */}
-                <div>
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5 block">
-                    Email Address <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
-                    <input
-                      ref={emailRef}
-                      type="email"
-                      required
-                      value={customerEmail}
-                      onChange={(e) => {
-                        setCustomerEmail(e.target.value);
-                        setError("");
-                      }}
-                      placeholder="you@example.com"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
-                    />
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Name */}
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5 block">
+                      Full Name
+                    </label>
+                    <div className="relative">
+                      <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
+                      <input
+                        ref={nameRef}
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Your name"
+                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                      />
+                    </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1.5">
-                    Your license key & download link will be emailed here.
-                  </p>
-                </div>
 
-                {/* Error */}
-                {error && (
-                  <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                    {error}
-                  </p>
-                )}
+                  {/* Email */}
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5 block">
+                      Email <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
+                      <input
+                        type="email"
+                        required
+                        value={customerEmail}
+                        onChange={(e) => { setCustomerEmail(e.target.value); setError(""); }}
+                        placeholder="you@email.com"
+                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                      />
+                    </div>
+                    <p className="text-[11px] text-zinc-600 mt-1.5">
+                      License key & download link will be sent here.
+                    </p>
+                  </div>
 
-                {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] disabled:opacity-60 disabled:cursor-not-allowed text-sm"
-                >
-                  {loading ? (
-                    <Loader2 size={18} className="animate-spin" />
-                  ) : (
-                    <>
-                      Proceed to Pay {currencySymbol}{price}
-                      <ArrowRight size={16} />
-                    </>
+                  {/* Error */}
+                  {error && (
+                    <p className="text-red-400 text-sm bg-red-500/5 border border-red-500/10 rounded-lg px-3 py-2">
+                      {error}
+                    </p>
                   )}
-                </button>
-              </form>
+
+                  {/* Submit */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3 bg-white hover:bg-zinc-100 text-zinc-900 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-2"
+                  >
+                    {loading ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <>
+                        Pay {currencySymbol}{price}
+                        <ArrowRight size={14} />
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
             </div>
           </motion.div>
         </>
