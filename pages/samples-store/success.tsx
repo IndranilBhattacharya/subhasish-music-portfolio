@@ -13,6 +13,7 @@ import {
   Copy,
   Check,
   ArrowLeft,
+  Mail,
 } from "lucide-react";
 
 import ToolBar from "../../components/Utilities/ToolBar";
@@ -36,7 +37,7 @@ const SuccessPage: NextPage = () => {
   const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const [copied, setCopied] = useState(false);
-  const hasVerifiedRef = useRef(false); // Prevent double-fire in React 18 Strict Mode
+  const hasVerifiedRef = useRef(false);
 
   const getFingerprint = useCallback(async (): Promise<string> => {
     try {
@@ -45,70 +46,45 @@ const SuccessPage: NextPage = () => {
       const fpResult = await fp.get();
       return fpResult.visitorId;
     } catch {
-      const raw = [
-        navigator.userAgent,
-        navigator.language,
-        screen.width,
-        screen.height,
-        screen.colorDepth,
-        new Date().getTimezoneOffset(),
-      ].join("|");
+      const raw = [navigator.userAgent, navigator.language, screen.width, screen.height, screen.colorDepth, new Date().getTimezoneOffset()].join("|");
       let hash = 0;
-      for (let i = 0; i < raw.length; i++) {
-        const char = raw.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash |= 0;
-      }
+      for (let i = 0; i < raw.length; i++) { hash = (hash << 5) - hash + raw.charCodeAt(i); hash |= 0; }
       return `fallback-${Math.abs(hash).toString(36)}`;
     }
   }, []);
 
-  /**
-   * Download via our proxy endpoint so the browser downloads
-   * the file as an attachment — staying on this page.
-   */
-  const triggerDownload = useCallback(
-    async (signedUrl: string, productName: string) => {
-      setDownloading(true);
-      try {
-        const filename = `${productName || "download"}.zip`;
-        const proxyUrl = `/api/proxy-download?url=${encodeURIComponent(signedUrl)}&filename=${encodeURIComponent(filename)}`;
-        
-        const res = await fetch(proxyUrl);
-        if (!res.ok) throw new Error("Download failed");
-
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = filename;
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(blobUrl);
-
-        setDownloaded(true);
-      } catch (err) {
-        console.error("Download error:", err);
-        // Fallback: open in new tab (won't navigate away)
-        window.open(signedUrl, "_blank");
-        setDownloaded(true);
-      } finally {
-        setDownloading(false);
-      }
-    },
-    []
-  );
+  const triggerDownload = useCallback(async (signedUrl: string, productName: string) => {
+    setDownloading(true);
+    try {
+      const filename = `${productName || "download"}.zip`;
+      const proxyUrl = `/api/proxy-download?url=${encodeURIComponent(signedUrl)}&filename=${encodeURIComponent(filename)}`;
+      const res = await fetch(proxyUrl);
+      if (!res.ok) throw new Error("Download failed");
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+      setDownloaded(true);
+    } catch (err) {
+      console.error("Download error:", err);
+      window.open(signedUrl, "_blank");
+      setDownloaded(true);
+    } finally {
+      setDownloading(false);
+    }
+  }, []);
 
   const copyLicenseKey = useCallback(async () => {
     if (!result?.license_key) return;
     try {
       await navigator.clipboard.writeText(result.license_key);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
     } catch {
-      // Fallback for older browsers
       const ta = document.createElement("textarea");
       ta.value = result.license_key;
       ta.style.position = "fixed";
@@ -117,9 +93,9 @@ const SuccessPage: NextPage = () => {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   }, [result?.license_key]);
 
   useEffect(() => {
@@ -132,10 +108,9 @@ const SuccessPage: NextPage = () => {
       razorpay_payment_link_reference_id,
       razorpay_payment_link_status,
       razorpay_signature,
-      session_id,
     } = router.query;
 
-    if (!razorpay_payment_id && !session_id) {
+    if (!razorpay_payment_id) {
       setStatus("error");
       setResult({ success: false, error: "No payment information found in URL." });
       return;
@@ -144,7 +119,6 @@ const SuccessPage: NextPage = () => {
     const verifyPayment = async () => {
       try {
         const fingerprint = await getFingerprint();
-
         const res = await fetch("/api/verify-payment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -154,7 +128,6 @@ const SuccessPage: NextPage = () => {
             razorpay_payment_link_reference_id: razorpay_payment_link_reference_id || "",
             razorpay_payment_link_status,
             razorpay_signature,
-            session_id,
             fingerprint,
           }),
         });
@@ -170,23 +143,19 @@ const SuccessPage: NextPage = () => {
         setStatus("success");
         setResult(data);
 
-        // Auto-download after a brief delay so user sees the success screen
+        // Auto-download after user sees the success screen
         if (data.download_url && data.product_name) {
           setTimeout(() => {
             triggerDownload(data.download_url!, data.product_name!);
-          }, 2500);
+          }, 2000);
         }
       } catch (err: any) {
         setStatus("error");
-        setResult({
-          success: false,
-          error: err.message || "Unexpected error during verification.",
-        });
+        setResult({ success: false, error: err.message || "Unexpected error during verification." });
       }
     };
 
     verifyPayment();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
   const handleManualDownload = () => {
@@ -195,245 +164,183 @@ const SuccessPage: NextPage = () => {
     }
   };
 
-  const pageVariants = {
-    initial: { opacity: 0 },
-    stable: { opacity: 1 },
-    exit: { opacity: 0 },
-  };
-
   return (
     <motion.div
-      exit="exit"
-      animate="stable"
-      initial="initial"
-      variants={pageVariants}
+      exit={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
       className="relative min-h-screen w-full flex flex-col items-center"
     >
       <Head>
-        <title>Payment Confirmation | Subhasish Music</title>
+        <title>Order Confirmed | Subhasish Music</title>
         <meta name="robots" content="noindex" />
       </Head>
 
       <ToolBar />
 
-      <main className="flex-1 flex items-center justify-center w-[90vw] md:w-[85vw] lg:w-[60vw] 2xl:w-[50vw] px-4 pt-28 pb-32 z-10">
-        {/* ─── VERIFYING STATE ──────────────────────────────────── */}
+      <main className="flex-1 flex items-center justify-center w-[92vw] sm:w-[85vw] md:w-[75vw] lg:w-[55vw] xl:w-[48vw] 2xl:w-[42vw] px-4 pt-28 pb-32 z-10">
+        {/* VERIFYING */}
         {status === "verifying" && (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center flex flex-col items-center gap-6"
+            className="text-center flex flex-col items-center gap-5"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-indigo-500/20 rounded-full blur-[60px]" />
-              <Loader2 size={64} className="text-indigo-400 animate-spin relative z-10" />
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">
-              Verifying Payment...
+            <Loader2 size={48} className="text-indigo-400 animate-spin" />
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
+              Confirming your payment...
             </h1>
-            <p className="text-gray-400 text-lg max-w-md">
-              Hang tight — we&apos;re confirming your payment and generating
-              your license key.
+            <p className="text-gray-500 text-base max-w-sm">
+              We&apos;re verifying the transaction and generating your license key. This will only take a moment.
             </p>
-            <div className="flex items-center gap-3 mt-4">
-              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse delay-150" style={{ animationDelay: "0.15s" }} />
-              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse delay-300" style={{ animationDelay: "0.3s" }} />
-            </div>
           </motion.div>
         )}
 
-        {/* ─── SUCCESS STATE ────────────────────────────────────── */}
+        {/* SUCCESS */}
         {status === "success" && result && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="w-full max-w-2xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full"
           >
-            <div className="bg-black/40 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
-              {/* Glow effects */}
-              <div className="absolute -top-20 -right-20 w-80 h-80 bg-green-500/15 rounded-full blur-[100px] pointer-events-none" />
-              <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-indigo-500/15 rounded-full blur-[100px] pointer-events-none" />
-
-              {/* Success Icon */}
-              <div className="flex justify-center mb-8">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.2 }}
-                  className="relative"
-                >
-                  <div className="absolute inset-0 bg-green-500/20 rounded-full blur-[40px]" />
-                  <CheckCircle size={80} className="text-green-400 relative z-10" />
-                </motion.div>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white text-center mb-3">
-                Payment Successful!
-              </h1>
-              <p className="text-gray-400 text-center text-lg mb-10">
-                Thank you for purchasing{" "}
-                <span className="text-white font-semibold">{result.product_name}</span>
-              </p>
-
-              {/* License Key with Copy */}
+            {/* Header */}
+            <div className="text-center mb-10">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
+                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 mb-5"
               >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <Key size={20} className="text-indigo-400" />
-                    <span className="text-sm font-bold text-indigo-300 uppercase tracking-widest">
-                      Your License Key
-                    </span>
+                <CheckCircle size={32} className="text-green-400" />
+              </motion.div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Order Confirmed</h1>
+              <p className="text-gray-500 text-base">
+                Your copy of <span className="text-white font-medium">{result.product_name}</span> is ready.
+              </p>
+            </div>
+
+            {/* Card */}
+            <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl overflow-hidden">
+              {/* License Key Section */}
+              <div className="p-6 sm:p-8 border-b border-zinc-800">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <Key size={16} className="text-zinc-500" />
+                    <span className="text-xs font-semibold text-zinc-500 uppercase tracking-[0.15em]">License Key</span>
                   </div>
                   <button
                     onClick={copyLicenseKey}
-                    className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10"
+                    className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors px-2.5 py-1 rounded-md hover:bg-zinc-800"
                   >
-                    {copied ? (
-                      <>
-                        <Check size={12} className="text-green-400" />
-                        <span className="text-green-400">Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={12} />
-                        Copy
-                      </>
-                    )}
+                    {copied ? <><Check size={12} className="text-green-400" /><span className="text-green-400">Copied</span></> : <><Copy size={12} />Copy</>}
                   </button>
                 </div>
                 <div
                   onClick={copyLicenseKey}
-                  className="bg-black/50 rounded-xl px-5 py-4 font-mono text-lg text-green-300 break-all select-all cursor-pointer border border-white/5 hover:border-indigo-500/30 transition-colors"
+                  className="bg-zinc-950 rounded-lg px-4 py-3 font-mono text-sm sm:text-base text-emerald-400 break-all cursor-pointer border border-zinc-800 hover:border-zinc-700 transition-colors select-all"
                 >
                   {result.license_key}
                 </div>
-                <p className="text-xs text-gray-500 mt-3">
-                  Save this key — it&apos;s your proof of purchase.
+                <p className="text-xs text-zinc-600 mt-2.5">
+                  This is your permanent license key. Keep it safe — you&apos;ll need it for support requests.
                 </p>
-              </motion.div>
+              </div>
 
-              {/* Device Lock Info */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6"
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <Shield size={20} className="text-indigo-400" />
-                  <span className="text-sm font-bold text-indigo-300 uppercase tracking-widest">
-                    Device Locked
-                  </span>
+              {/* Device Info */}
+              <div className="px-6 sm:px-8 py-5 border-b border-zinc-800 flex items-start gap-3">
+                <Shield size={16} className="text-zinc-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-zinc-400 font-medium">Locked to this device</p>
+                  <p className="text-xs text-zinc-600 mt-0.5">
+                    You can re-download this product anytime from the store on this device.
+                  </p>
                 </div>
-                <p className="text-gray-400 text-sm">
-                  This purchase is linked to your current browser/device.
-                  You can re-download anytime on this device using your license key.
-                </p>
-              </motion.div>
+              </div>
 
-              {/* Download Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
+              {/* Email Info */}
+              {result.customer_email && (
+                <div className="px-6 sm:px-8 py-5 border-b border-zinc-800 flex items-start gap-3">
+                  <Mail size={16} className="text-zinc-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-zinc-400 font-medium">Confirmation sent</p>
+                    <p className="text-xs text-zinc-600 mt-0.5">
+                      License key and download link emailed to <span className="text-zinc-400">{result.customer_email}</span>
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Download */}
+              <div className="p-6 sm:p-8">
                 <button
                   onClick={handleManualDownload}
                   disabled={downloading}
-                  className="w-full py-4 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-[0_0_25px_rgba(99,102,241,0.3)] hover:shadow-[0_0_40px_rgba(99,102,241,0.5)] hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-wait"
+                  className="w-full py-3.5 bg-white hover:bg-zinc-100 text-zinc-900 rounded-xl font-semibold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 disabled:cursor-wait"
                 >
                   {downloading ? (
-                    <>
-                      <Loader2 size={22} className="animate-spin" />
-                      Downloading...
-                    </>
+                    <><Loader2 size={18} className="animate-spin" />Downloading...</>
                   ) : (
-                    <>
-                      <Download size={22} />
-                      {downloaded ? "Download Again" : "Download Now"}
-                    </>
+                    <><Download size={18} />{downloaded ? "Download Again" : "Download Now"}</>
                   )}
                 </button>
                 {downloaded && !downloading && (
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-center text-green-400/70 text-sm mt-3"
+                    className="text-center text-emerald-500/60 text-xs mt-3"
                   >
-                    ✓ Download complete. Check your downloads folder.
+                    Download complete — check your downloads folder.
                   </motion.p>
                 )}
-              </motion.div>
-
-              {/* Email Note */}
-              {result.customer_email && (
-                <p className="text-center text-gray-500 text-sm mt-6">
-                  A confirmation with your license key and download link
-                  has been sent to{" "}
-                  <span className="text-gray-300">{result.customer_email}</span>
-                </p>
-              )}
+              </div>
             </div>
 
             {/* Back to store */}
             <div className="text-center mt-8">
               <button
                 onClick={() => router.push("/samples-store")}
-                className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-semibold text-sm transition-colors"
+                className="inline-flex items-center gap-2 text-zinc-500 hover:text-white text-sm font-medium transition-colors"
               >
-                <ArrowLeft size={16} />
+                <ArrowLeft size={14} />
                 Back to The Vault
               </button>
             </div>
           </motion.div>
         )}
 
-        {/* ─── ERROR STATE ──────────────────────────────────────── */}
+        {/* ERROR */}
         {status === "error" && (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center flex flex-col items-center gap-6 max-w-lg"
+            className="text-center flex flex-col items-center gap-5 max-w-md"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-red-500/20 rounded-full blur-[60px]" />
-              <AlertTriangle size={64} className="text-red-400 relative z-10" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20">
+              <AlertTriangle size={32} className="text-red-400" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               Verification Failed
             </h1>
-            <p className="text-gray-400 text-lg">
-              {result?.error ||
-                "We couldn't verify your payment. If money was deducted, please contact support."}
+            <p className="text-gray-500 text-base">
+              {result?.error || "We couldn't verify your payment. If money was deducted, please contact support."}
             </p>
             {result?.details && (
-              <p className="text-red-400/60 text-xs font-mono bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2 max-w-full break-all">
-                Debug: {result.details}
+              <p className="text-red-400/50 text-xs font-mono bg-red-500/5 border border-red-500/10 rounded-lg px-4 py-2 max-w-full break-all">
+                {result.details}
               </p>
             )}
-            <div className="flex gap-4 mt-4">
+            <div className="flex gap-3 mt-2">
               <button
                 onClick={() => router.push("/samples-store")}
-                className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-xl font-semibold transition-colors inline-flex items-center gap-2"
+                className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
               >
-                <ArrowLeft size={16} />
-                Back to Store
+                <ArrowLeft size={14} />
+                Store
               </button>
               <button
-                onClick={() => {
-                  hasVerifiedRef.current = false;
-                  setStatus("verifying");
-                  setResult(null);
-                  window.location.reload();
-                }}
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold transition-colors"
+                onClick={() => { hasVerifiedRef.current = false; window.location.reload(); }}
+                className="px-5 py-2.5 bg-white hover:bg-zinc-100 text-zinc-900 rounded-lg text-sm font-medium transition-colors"
               >
                 Retry
               </button>

@@ -8,7 +8,7 @@ import { sendPurchaseEmail } from "../../lib/email";
  *
  * Called from the success page after Razorpay redirect.
  * Verifies the payment signature, creates an order + license,
- * generates a 24h signed download URL, sends confirmation email,
+ * generates a signed download URL, sends confirmation email,
  * and returns it all to the client so the browser can auto-download.
  */
 
@@ -119,7 +119,7 @@ export default async function handler(
 
       const { data: signedUrlData } = await supabaseAdmin.storage
         .from("vst-releases")
-        .createSignedUrl(product.file_path, 60 * 60 * 24);
+        .createSignedUrl(product.file_path, 60 * 60 * 24 * 7);
 
       return res.status(200).json({
         success: true,
@@ -182,11 +182,11 @@ export default async function handler(
       throw new Error("Could not find purchased product.");
     }
 
-    // ── Generate 24h signed download URL ─────────────────────────────
+    // ── Generate signed download URL ─────────────────────────────────
     const { data: signedUrlData, error: storageError } = await supabaseAdmin
       .storage
       .from("vst-releases")
-      .createSignedUrl(product.file_path, 60 * 60 * 24);
+      .createSignedUrl(product.file_path, 60 * 60 * 24 * 7);
 
     if (storageError) {
       throw new Error(`Signed URL generation failed: ${storageError.message}`);
