@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import crypto from "crypto";
 import { supabaseAdmin } from "../../lib/supabase/admin";
+import { sendPurchaseEmail } from "../../lib/email";
 
 /**
  * POST /api/verify-payment
@@ -191,51 +192,17 @@ export default async function handler(
       throw new Error(`Signed URL generation failed: ${storageError.message}`);
     }
 
-    // ── Send confirmation email via Resend ───────────────────────────
-    if (customerEmail) {
-      try {
-        const { Resend } = await import("resend");
-        const resend = new Resend(process.env.RESEND_API_KEY);
-
-        await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL || "Subhasish Music <onboarding@resend.dev>",
-          to: customerEmail,
-          subject: `Your Purchase: ${product.name} — License Key & Download`,
-          html: `
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:40px 24px;">
-    <div style="background:linear-gradient(135deg,#1e1b4b 0%,#0f0f23 100%);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 32px;text-align:center;">
-      <h1 style="color:#fff;font-size:28px;margin:0 0 8px;">✅ Payment Successful!</h1>
-      <p style="color:#a5b4fc;font-size:16px;margin:0 0 32px;">Thank you for purchasing <strong style="color:#fff;">${product.name}</strong></p>
-
-      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;margin-bottom:24px;text-align:left;">
-        <p style="color:#818cf8;font-size:12px;text-transform:uppercase;letter-spacing:2px;margin:0 0 12px;font-weight:700;">🔑 Your License Key</p>
-        <p style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:16px;font-family:monospace;font-size:16px;color:#4ade80;word-break:break-all;margin:0;">${license.license_key}</p>
-        <p style="color:#6b7280;font-size:12px;margin:12px 0 0;">Save this key — it is your proof of purchase.</p>
-      </div>
-
-      <a href="${signedUrlData.signedUrl}" style="display:inline-block;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:14px;text-decoration:none;margin-bottom:16px;">⬇️ Download ${product.name}</a>
-      <p style="color:#6b7280;font-size:12px;margin:12px 0 0;">This download link expires in 24 hours.</p>
-
-      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:32px 0;">
-      <p style="color:#4b5563;font-size:12px;margin:0;">Subhasish Music · subhasishmusic.com</p>
-    </div>
-  </div>
-</body>
-</html>`,
-        });
-
-        console.log(`[EMAIL SENT] License email sent to ${customerEmail}`);
-      } catch (emailErr: any) {
-        // Don't fail the whole flow if email fails
-        console.error("Email sending failed:", emailErr.message);
-      }
-    } else {
-      console.warn("[NO EMAIL] Customer email not available — skipping email. Phone:", customerPhone);
-    }
+    // ── Send confirmation email ───────────────────────────────────────
+    await sendPurchaseEmail({
+      customerEmail,
+      customerName,
+      productName: product.name,
+      licenseKey: license.license_key,
+      downloadUrl: signedUrlData.signedUrl,
+      amountPaid,
+      currency,
+      orderId: order.id,
+    });
 
     console.log("─────────────────────────────────────────────");
     console.log(`[PAYMENT VERIFIED] Email: ${customerEmail} | Phone: ${customerPhone}`);
