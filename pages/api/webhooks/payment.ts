@@ -125,6 +125,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from("vst-releases")
             .createSignedUrl(product.file_path, 60 * 60 * 24 * 7);
 
+          const host = req.headers.host;
+          const protocol = req.headers["x-forwarded-proto"] || (host?.includes("localhost") ? "http" : "https");
+          const baseUrl = host ? `${protocol}://${host}` : undefined;
+
           await sendPurchaseEmail({
             customerEmail,
             customerName,
@@ -134,6 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             amountPaid,
             currency,
             orderId: order.id,
+            baseUrl,
           });
         }
       } catch (emailErr: any) {

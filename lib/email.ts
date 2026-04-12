@@ -17,6 +17,7 @@ interface PurchaseEmailParams {
   amountPaid?: number;
   currency?: string;
   orderId?: string;
+  baseUrl?: string;
 }
 
 function getBccList(): string[] | undefined {
@@ -32,10 +33,16 @@ function formatPrice(amount?: number, currency?: string): string {
 }
 
 function buildPurchaseEmailHtml(params: PurchaseEmailParams): string {
-  const { customerName, productName, licenseKey, downloadUrl, amountPaid, currency, orderId } = params;
+  const { customerName, productName, licenseKey, downloadUrl, amountPaid, currency, orderId, baseUrl } = params;
   const contactPhone = process.env.CONTACT_PHONE || "";
   const contactAddress = process.env.CONTACT_ADDRESS || "";
-  const storeUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://subhasishmusic.com";
+
+  // Automatically detect Vercel URLs if not passed directly
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL 
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` 
+    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
+  const storeUrl = baseUrl || vercelUrl || "https://subhasishmusic.com";
   const displayName = customerName || "there";
   const priceDisplay = formatPrice(amountPaid, currency);
   const logoUrl = "https://i.ibb.co/QvZqH1Q6/subhasish-logo-s.png";

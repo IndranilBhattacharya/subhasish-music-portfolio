@@ -192,6 +192,10 @@ export default async function handler(
       throw new Error(`Signed URL generation failed: ${storageError.message}`);
     }
 
+    const host = req.headers.host;
+    const protocol = req.headers["x-forwarded-proto"] || (host?.includes("localhost") ? "http" : "https");
+    const baseUrl = host ? `${protocol}://${host}` : undefined;
+
     // ── Send confirmation email ───────────────────────────────────────
     await sendPurchaseEmail({
       customerEmail,
@@ -202,6 +206,7 @@ export default async function handler(
       amountPaid,
       currency,
       orderId: order.id,
+      baseUrl,
     });
 
     console.log("─────────────────────────────────────────────");

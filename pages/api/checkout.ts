@@ -38,6 +38,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (customer_name) customer.name = customer_name;
     if (customer_email) customer.email = customer_email;
 
+    const host = req.headers.host;
+    const protocol = req.headers["x-forwarded-proto"] || (host?.includes("localhost") ? "http" : "https");
+    const baseUrl = `${protocol}://${host}`;
+
     const paymentLink = await razorpay.paymentLink.create({
       amount: Math.round(price * 100),
       currency: currency === "USD" ? "USD" : "INR",
@@ -55,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         customer_name: customer_name || "",
         customer_email: customer_email || "",
       },
-      callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/samples-store/success`,
+      callback_url: `${baseUrl}/samples-store/success`,
       callback_method: "get",
     });
 

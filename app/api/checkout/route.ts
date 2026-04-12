@@ -36,6 +36,10 @@ export async function POST(req: Request) {
 
     const price = currency === "USD" ? product.price_usd : product.price_inr;
 
+    const host = req.headers.get("host");
+    const protocol = req.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
+    const baseUrl = `${protocol}://${host}`;
+
     // 2. Routing Logic based on currency
     if (currency === "USD") {
       // Create Stripe Checkout Session
@@ -56,8 +60,8 @@ export async function POST(req: Request) {
           },
         ],
         mode: "payment",
-        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/sample-store/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/sample-store/cancel`,
+        success_url: `${baseUrl}/sample-store/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/sample-store/cancel`,
         metadata: {
           product_id: product.id,
           currency: "USD",
@@ -83,7 +87,7 @@ export async function POST(req: Request) {
           product_id: product.id,
           currency: "INR",
         },
-        callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/sample-store/success`,
+        callback_url: `${baseUrl}/sample-store/success`,
         callback_method: "get",
       });
 
