@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { supabaseAdmin } from "../../lib/supabase/admin";
+import crypto from "crypto";
 
 /**
  * POST /api/verify-license
@@ -63,8 +64,14 @@ export default async function handler(
     const isRegistered = fingerprints.includes(device_id);
 
     if (isRegistered) {
+      const token = crypto
+        .createHmac("sha256", process.env.LICENSE_HMAC_SECRET || "")
+        .update(`${device_id}|${license_key}`)
+        .digest("hex");
+
       return res.status(200).json({
         valid: true,
+        token,
         message: "Device is already registered and verified."
       });
     } else {
@@ -84,8 +91,14 @@ export default async function handler(
           throw updateError;
         }
 
+        const token = crypto
+          .createHmac("sha256", process.env.LICENSE_HMAC_SECRET || "")
+          .update(`${device_id}|${license_key}`)
+          .digest("hex");
+
         return res.status(200).json({
           valid: true,
+          token,
           message: "Device successfully registered and verified."
         });
       } else {
