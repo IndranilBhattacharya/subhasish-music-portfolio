@@ -1,5 +1,5 @@
 .bw-background {
-  @apply w-full h-full bg-cover bg-top;
+  @apply w-full h-full bg-cover bg-center;
   background-image: url("/images/subhasish/Subhasish_BG_Initial.png");
 }
 
@@ -7,39 +7,36 @@
   @apply flex flex-col w-full lg:flex-1;
 }
 
+/* Colour photo revealed through a 5-frame paint sprite (mask is 5 photo widths wide).
+   Same size/position as .bw-background so both layers overlap pixel for pixel. */
 .mask-animator {
-  @apply z-10 w-full h-full absolute bg-cover overflow-hidden;
-  mask-size: cover;
-  mask-position: 0% 0%;
-  mask-size: 500% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: cover;
-  -webkit-mask-position: 0% 0%;
-  -webkit-mask-size: 500% 100%;
-  -webkit-mask-repeat: no-repeat;
-  transition: -webkit-mask-position;
+  @apply z-10 w-full h-full absolute inset-0 bg-cover bg-center;
   background-image: url("/images/subhasish/Subhasish.png");
   mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
   -webkit-mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
+  mask-size: 500% 100%;
+  -webkit-mask-size: 500% 100%;
+  mask-position: 0% 0%;
+  -webkit-mask-position: 0% 0%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  opacity: 0;
+  will-change: opacity, mask-position;
 }
 
 .animate-mask {
-  animation: bwToColor 1.5s steps(4) 0.5s forwards;
+  animation: fadeIn 0.6s ease-out forwards, bwToColor 1.6s steps(4) 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 0.95;
+  }
 }
 
 @keyframes bwToColor {
-  0% {
-    mask-position: 0% 0%;
-    -webkit-mask-position: 0% 0%;
-  }
-  99% {
+  to {
     mask-position: 100% 0%;
     -webkit-mask-position: 100% 0%;
-    mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
-    -webkit-mask-image: url("/images/subhasish/Subhasish_Mask_Foreground.png");
-  }
-  100% {
-    mask-image: none;
-    -webkit-mask-image: none;
   }
 }
