@@ -8,7 +8,8 @@ const SectionWatermark: FC<{ top: MotionValue<string>; content: string }> = ({
   return (
     <motion.div
       style={{ top }}
-      className="z-0 leading-[12rem] text-[13rem] w-max absolute left-1/12 watermark"
+      aria-hidden
+      className="z-0 leading-none text-[clamp(4.5rem,15vw,13rem)] font-display font-bold w-max absolute left-0 pointer-events-none select-none watermark"
     >
       {content}
     </motion.div>

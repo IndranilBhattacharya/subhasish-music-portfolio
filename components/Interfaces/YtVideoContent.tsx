@@ -36,13 +36,16 @@ const YtVideoContent: FC<{ video: YTVideoResponse }> = ({ video }) => {
   }, []);
   return (
     <>
-      <div className="flex flex-col gap-1 px-5 pt-4 pb-12">
-        <div className="w-full truncate text-xl" title={video.snippet.title}>
+      <div className="flex-1 flex flex-col gap-2 px-5 pt-4 pb-4">
+        <div
+          className="w-full truncate text-lg font-semibold"
+          title={video.snippet.title}
+        >
           {video.snippet.title}
         </div>
-        <div className="flex items-start gap-8 w-full text-gray-400">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-1 w-full text-sm text-gray-400">
           <span className="flex gap-1 items-center">
-            <GrUploadOption className="fill-gray-400" />
+            <GrUploadOption className="[&_path]:stroke-current" />
             {getPublishDate(video.snippet.publishedAt)}
           </span>
           <span className="flex gap-1 items-center">
@@ -50,7 +53,7 @@ const YtVideoContent: FC<{ video: YTVideoResponse }> = ({ video }) => {
           </span>
         </div>
       </div>
-      <div className="px-5 pb-6">
+      <div className="px-5 py-4 border-t border-white/10">
         <span className="w-fit flex gap-2 items-center">
           <ImLink className="fill-red-500" />
           <a

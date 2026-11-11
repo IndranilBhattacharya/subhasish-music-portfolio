@@ -1,18 +1,16 @@
+import Link from "next/link";
 import { FC, memo } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import { BsMusicNote, BsSoundwave } from "react-icons/bs";
 
-const Player = dynamic(
-  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  { ssr: false }
-);
-const Controls = dynamic(
-  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Controls),
-  { ssr: false }
-);
-import DynamicBg from "../Interfaces/DynamicBg";
+import useWindowSize from "../../hooks/useWindowSize";
 import AnimatedMouseScroll from "../Interfaces/AnimatedMouseScroll";
-import SwipeUpAction from "../../assets/jsons/swipe-up-for-more.json";
+
+const ThreeDMeshForHero = dynamic(
+  () => import("../Interfaces/ThreeDMeshForHero"),
+  { ssr: false }
+);
 
 const message = {
   hidden: { opacity: 0 },
@@ -29,81 +27,76 @@ const sentence = {
 };
 
 const HeroMessage: FC = () => {
+  const [wScreen] = useWindowSize();
+
   return (
     <div
       id="hero-top"
-      className="relative w-full h-full flex flex-col pt-[5vh] lg:pt-7 lg:justify-center pb-[15vh]"
+      className="hero-height relative w-full flex flex-col justify-center pt-10 pb-28 lg:pt-24 lg:pb-24"
     >
+      {/* Below lg the fixed illustration column is hidden: the scene sits behind the copy. */}
+      {wScreen > 0 && wScreen < 1024 && (
+        <div className="absolute -top-[2vh] -right-[22vw] w-[95vw] max-w-[38rem] aspect-square opacity-50 pointer-events-none">
+          <ThreeDMeshForHero />
+        </div>
+      )}
       <motion.div
         initial="hidden"
         variants={message}
         whileInView="visible"
         viewport={{ once: false, amount: 0.3 }}
-        className="w-full gap-1 flex flex-col text-6xl font-bold"
         transition={{ type: "spring", bounce: 0.4, duration: 0.8 }}
+        className="relative w-full flex flex-col"
       >
-        <motion.div custom={1} variants={sentence}>
-          I make
+        <motion.div custom={0} variants={sentence} className="eyebrow mb-5">
+          Producer &middot; Composer &middot; Singer
         </motion.div>
-        <motion.div custom={2} variants={sentence}>
-          Music that keeps you
-        </motion.div>
-        <motion.div custom={3} variants={sentence} className="flex items-start">
-          in
-          <div className="h-[4rem] w-60 relative">
-            <svg
-              width="100%"
-              height="100%"
-              className="hero-mask absolute top-0 left-0 w-full"
-            >
-              <defs>
-                <mask id="hero_mask" x="0" y="0" width="100%" height="100%">
-                  <rect x="0" y="0" width="100%" height="100%" />
-                  <text x="35%" y="80%" fill="red" textAnchor="middle">
-                    Loop
-                  </text>
-                </mask>
-              </defs>
-              <rect x="0" y="0" width="100%" height="100%" />
-            </svg>
-            <DynamicBg />
-          </div>
-        </motion.div>
+        <h1 className="flex flex-col gap-1 font-display font-bold tracking-tight leading-[1.08] text-[clamp(2.25rem,8vw,4rem)]">
+          <motion.span custom={1} variants={sentence}>
+            I make
+          </motion.span>
+          <motion.span custom={2} variants={sentence}>
+            Music that keeps you
+          </motion.span>
+          <motion.span custom={3} variants={sentence}>
+            in <span className="text-gradient-red">Loop</span>
+          </motion.span>
+        </h1>
       </motion.div>
-      <motion.div
+      <motion.p
         custom={4}
         initial="hidden"
         variants={sentence}
         whileInView="visible"
-        className="mt-8 mb-10 text-gray-200 flex flex-wrap text-lg"
+        className="relative mt-7 max-w-[55ch] text-lg leading-relaxed text-gray-300"
       >
         I can help you compose and produce music that can touch the souls of
-        your audiences.
-        <span className="hidden lg:flex flex-wrap">
-          You can also get music samples as per your need from the Samples store
-          section.
-        </span>
-      </motion.div>
+        your audiences. You can also get music samples as per your need from
+        the Samples store section.
+      </motion.p>
       <motion.div
-        custom={6}
+        custom={5}
         initial="hidden"
         variants={sentence}
-        className="w-full flex lg:hidden justify-center opacity-75"
+        whileInView="visible"
+        className="relative mt-9 flex flex-wrap gap-4"
       >
-        <Player
-          loop
-          autoplay
-          src={SwipeUpAction}
-          style={{ height: "10vh", width: "10vh" }}
-        >
-          <Controls visible={false} />
-        </Player>
+        <Link href="/#my-songs">
+          <a className="btn-primary">
+            <BsMusicNote /> Listen to my songs
+          </a>
+        </Link>
+        <Link href="/samples-store">
+          <a className="btn-ghost">
+            <BsSoundwave /> Browse samples
+          </a>
+        </Link>
       </motion.div>
-      <div className="absolute left-0 bottom-7 h-10 gap-4 hidden lg:flex items-center">
+      <div className="absolute left-0 bottom-7 h-10 gap-4 hidden lg:flex items-center text-gray-300">
         <AnimatedMouseScroll className="h-full aspect-square" />
         <span className="font-semibold">Explore my work..</span>
       </div>
-      <span id="my-songs"></span>
+      <span id="my-songs" className="absolute bottom-0 left-0"></span>
     </div>
   );
 };

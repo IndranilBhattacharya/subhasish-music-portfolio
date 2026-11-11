@@ -50,7 +50,7 @@ const YtExpression: FC<YtExpInfo> = ({
         initial="hidden"
         key="ytAnalyticsHolder"
         variants={anayticsHolderVariants}
-        className="w-full flex items-center justify-evenly"
+        className="w-full grid grid-cols-3 gap-3"
         animate={youTubeSvgPathProgress >= 1 ? "visible" : "hidden"}
       >
         {ytStatsForDisplay.map((stat, i) => (
@@ -58,13 +58,13 @@ const YtExpression: FC<YtExpInfo> = ({
             custom={i}
             key={stat.statField}
             variants={ytStatVariants}
-            className="flex flex-col"
+            className="glass-card px-3 py-4 flex flex-col items-center gap-1 text-center"
           >
-            <div className="flex gap-2 items-center tracking-wide text-xs text-gray-200 uppercase">
-              <stat.icon />
+            <div className="flex gap-2 items-center tracking-wide text-xs text-gray-300 uppercase">
+              <stat.icon className="text-red-500" />
               {stat.statField}
             </div>
-            <div className="font-bold text-5xl">{stat.count}</div>
+            <div className="font-display font-bold text-[clamp(1.5rem,2.6vw,3rem)]">{stat.count}</div>
           </motion.div>
         ))}
       </motion.div>

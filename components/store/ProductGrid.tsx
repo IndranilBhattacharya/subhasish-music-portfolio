@@ -29,7 +29,7 @@ export default function ProductGrid({ products, currency, purchases = {} }: Prod
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2k:grid-cols-5 4k:grid-cols-6 8k:grid-cols-8 gap-8 4k:gap-14 8k:gap-24 w-full mt-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full mt-10">
       {products.map((product) => (
         <ProductCard
           key={product.id}

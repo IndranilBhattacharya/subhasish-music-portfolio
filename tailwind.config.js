@@ -14,6 +14,8 @@ module.exports = {
       },
       fontFamily: {
         body: ["Ubuntu", "sans-serif"],
+        display: ["Space Grotesk", "Ubuntu", "sans-serif"],
+        mono: ["Ubuntu Mono", "ui-monospace", "monospace"],
       },
       dropShadow: {
         highlight: "inset 0 1px 0 0 hsl(0deg 0% 100% / 5%)",

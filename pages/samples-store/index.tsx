@@ -77,7 +77,7 @@ const SamplesStore: NextPage<SamplesStoreProps> = ({ products, detectedCurrency 
       animate="stable"
       initial="initial"
       variants={sampleStorePageAnimationStates}
-      className="relative overflow-hidden w-full min-h-screen flex flex-col items-center pb-24"
+      className="relative overflow-hidden w-full min-h-screen flex flex-col items-center pb-28"
     >
       <Head>
         <title>Subhasish Music - The Vault</title>
@@ -88,22 +88,22 @@ const SamplesStore: NextPage<SamplesStoreProps> = ({ products, detectedCurrency 
 
       <ToolBar />
 
-      <main className="flex-1 w-[90vw] md:w-[85vw] lg:w-[80vw] 2xl:w-[75vw] 2k:w-[68vw] 4k:w-[58vw] 8k:w-[48vw] px-2 sm:px-4 4k:px-12 8k:px-24 pt-32 4k:pt-48 8k:pt-80 z-10 selection:bg-indigo-500 selection:text-white transition-colors duration-500">
+      <main className="flex-1 container-app pt-10 lg:pt-32 z-10">
         
         {/* Header */}
         <div className="flex flex-col items-center md:items-start mb-12 sm:mb-16 relative">
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-full h-[200px] bg-indigo-500/10 blur-[100px] pointer-events-none rounded-full" />
+          <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-full h-[200px] bg-red-500/10 blur-[100px] pointer-events-none rounded-full" />
           
           <div className="text-center md:text-left relative z-10">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              className="text-5xl sm:text-6xl lg:text-7xl 4k:text-[6rem] 8k:text-[10rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-indigo-100 to-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)] tracking-tight 4k:leading-tight 8k:leading-tight"
+              className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-b from-white via-red-100 to-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,0.3)] tracking-tight"
             >
               The Vault
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-3 4k:mt-8 8k:mt-12 text-lg sm:text-xl 4k:text-3xl 8k:text-5xl text-indigo-200/70 font-medium max-w-2xl 4k:max-w-4xl 8k:max-w-7xl tracking-wide 4k:leading-snug"
+              className="mt-3 text-lg sm:text-xl text-red-200/70 font-medium max-w-2xl tracking-wide"
             >
               Studio-grade tools & artifacts engineered to elevate your production workflow.
             </motion.p>
@@ -116,8 +116,8 @@ const SamplesStore: NextPage<SamplesStoreProps> = ({ products, detectedCurrency 
         )}
 
         {/* All Products */}
-        <div className="mt-16 4k:mt-32 8k:mt-64 mb-20 4k:mb-40 text-left w-full">
-          <h2 className="text-3xl 4k:text-5xl 8k:text-8xl font-bold text-white mb-8 4k:mb-16 border-l-4 4k:border-l-8 8k:border-l-[12px] border-indigo-500 pl-4 4k:pl-8 8k:pl-16 py-1 4k:py-3">
+        <div className="mt-16 mb-20 text-left w-full">
+          <h2 className="text-3xl font-bold text-white mb-8 border-l-4 border-red-500 pl-4 py-1">
             All Releases
           </h2>
           <ProductGrid products={products} currency={currency} purchases={purchases} />

@@ -1,10 +1,10 @@
 .bw-background {
-  @apply w-full h-full bg-cover;
+  @apply w-full h-full bg-cover bg-top;
   background-image: url("/images/subhasish/Subhasish_BG_Initial.png");
 }
 
 .content {
-  @apply pt-[10%] flex flex-wrap w-full lg:w-[calc(48%_-_2rem)];
+  @apply flex flex-col w-full lg:flex-1;
 }
 
 .mask-animator {
