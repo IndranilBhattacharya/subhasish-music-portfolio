@@ -63,40 +63,46 @@ const PortfolioSection: FC<IndexISRProps> = ({ ytVideos }) => {
   return (
     <div
       ref={portfolioSectionRef}
-      className="mt-16 lg:mt-32 w-full h-fit flex flex-col relative"
+      className="mt-20 lg:mt-32 w-full h-fit flex flex-col relative"
     >
       <SectionWatermark top={myReleasesY} content={"My Releases"} />
-      <div className="w-full text-4xl font-bold">My Releases</div>
-      <div className="mt-6 text-gray-200 drop-shadow-2xl flex flex-wrap">
-        {`You can find my originals on different popular platforms like YouTube, Apple Music, Spotify etc.
+      <div data-reveal>
+        <div className="eyebrow">Discography</div>
+        <h2 className="section-title">My Releases</h2>
+        <p className="section-text">
+          {`You can find my originals on different popular platforms like YouTube, Apple Music, Spotify etc.
         I've also collaborated with various artists to make some great melodies which are linked with my YouTube channel.`}
+        </p>
       </div>
-      <div className="mt-10 tracking-wide text-xs text-gray-200 uppercase">
-        #Top<span className="text-sm">5</span>
-      </div>
-      <div className="sub-head w-full text-2xl font-semibold">
-        Latest YouTube Songs
+      <div data-reveal>
+        <div className="mt-12 mb-1 tracking-wide text-xs text-red-400 uppercase">
+          #Top<span className="text-sm">5</span>
+        </div>
+        <h3 className="sub-head">Latest YouTube Songs</h3>
       </div>
       <div
         onMouseMove={onYtVideoCardMouseMoveHandler}
-        className="mt-7 w-full h-fit grid gap-5 lg:grid-cols-2 2k:grid-cols-3 4k:grid-cols-4"
+        className="mt-8 w-full h-fit grid gap-5 sm:grid-cols-2"
       >
         {ytVideos.map((video) => (
           <YtCard key={video.id} x={mousePosition.x} y={mousePosition.y}>
             <YtPlayer
               embedIFrame={video.player.embedHtml}
-              thumbnailsUrl={video.snippet.thumbnails["standard"].url}
+              thumbnailsUrl={(
+                video.snippet.thumbnails["standard"] ??
+                video.snippet.thumbnails["high"]
+              ).url}
             />
             <YtVideoContent video={video} />
           </YtCard>
         ))}
       </div>
-      <div className="sub-head mt-14 w-full text-2xl font-semibold">
-        Available On Other Platforms
-      </div>
-      <div className="mt-6 text-gray-200 flex flex-wrap">
-        You can explore my artist channels on several other Music platforms.
-        Please have a look!
+      <div data-reveal>
+        <h3 className="sub-head mt-16">Available On Other Platforms</h3>
+        <p className="section-text mt-7">
+          You can explore my artist channels on several other Music platforms.
+          Please have a look!
+        </p>
       </div>
       <ArtistPlatforms />
     </div>

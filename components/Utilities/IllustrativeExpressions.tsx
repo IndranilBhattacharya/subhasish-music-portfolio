@@ -1,10 +1,36 @@
 import { FC, memo, useEffect, useState } from "react";
-import { AnimatePresence, useScroll } from "framer-motion";
+import dynamic from "next/dynamic";
+import { motion, Variants, AnimatePresence, useScroll } from "framer-motion";
 
 import { HeroExpRefs } from "../../types";
 import YtExpression from "./YtExpression";
 import SkillsExpression from "./SkillsExpression";
-import ThreeDMeshForHero from "../Interfaces/ThreeDMeshForHero";
+import useWindowSize from "../../hooks/useWindowSize";
+
+// The 3D mesh only mounts on lg+ where this column is visible.
+const HeroMesh = dynamic(() => import("../Interfaces/ThreeDMeshForHero"), {
+  ssr: false,
+});
+
+const meshVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 1.5 } },
+};
+
+const ThreeDMeshForHero: FC = () => {
+  const [wScreen] = useWindowSize();
+  return wScreen >= 1024 ? (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={meshVariants}
+      className="w-full h-full"
+      exit={{ opacity: 0, transition: { duration: 0.3 } }}
+    >
+      <HeroMesh />
+    </motion.div>
+  ) : null;
+};
 
 const IllustrativeExpressions: FC<HeroExpRefs> = ({
   viewCount,
@@ -42,7 +68,7 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
 
   useEffect(() => {
     const initContentLoadTimeout = setTimeout(() => {
-      setInitHeroExpression(<ThreeDMeshForHero />);
+      setInitHeroExpression(<ThreeDMeshForHero key="heroMesh" />);
     }, 500);
 
     youTubeYProgress.onChange((latestYouTubeY) => {
@@ -69,7 +95,8 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
   useEffect(() => {
     const meshLoadTimeout = setTimeout(() => {
       youTubeY > 0.05 && setInitHeroExpression(<></>);
-      youTubeY <= 0.05 && setInitHeroExpression(<ThreeDMeshForHero />);
+      youTubeY <= 0.05 &&
+        setInitHeroExpression(<ThreeDMeshForHero key="heroMesh" />);
     }, 750);
 
     return () => clearTimeout(meshLoadTimeout);
@@ -80,6 +107,7 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
       {youTubeY <= 0.05 && initHeroExpression}
       {youTubeY > 0.05 && skillsY <= 0.1 && (
         <YtExpression
+          key="ytExpression"
           {...{
             viewCount,
             videoCount,
@@ -90,7 +118,7 @@ const IllustrativeExpressions: FC<HeroExpRefs> = ({
         />
       )}
       {skillsY > 0.1 && aboutMeY <= 0.18 && (
-        <SkillsExpression pathProgress={skillsY} />
+        <SkillsExpression key="skillsExpression" pathProgress={skillsY} />
       )}
     </AnimatePresence>
   );

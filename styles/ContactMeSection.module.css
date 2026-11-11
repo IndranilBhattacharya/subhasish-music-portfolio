@@ -1,37 +1,33 @@
 .official-mail-link {
-  --b: 0.25rem;
-  --c: #ef4444;
-
-  padding-block: var(--b);
-  @apply w-fit transform-gpu;
-  background: linear-gradient(var(--c) 50%, #000 0) 0%
-      calc(100% - var(--_p, 0%)) / 100% 200%,
-    linear-gradient(var(--c) 0 0) 0% var(--_p, 0%) / var(--_p, 0%) var(--b)
-      no-repeat;
-  -webkit-background-clip: text, padding-box;
-  background-clip: text, padding-box;
-  transition: 0.3s var(--_s, 0s) linear,
-    background-size 0.3s calc(0.3s - var(--_s, 0s));
+  @apply relative inline-block max-w-full pb-1.5 break-all text-white transition-colors duration-300;
 }
-.official-mail-link:hover {
-  --_p: 100%;
-  --_s: 0.3s;
-
+.official-mail-link::after {
+  @apply content-[''] absolute left-0 bottom-0 h-0.5 w-full origin-right scale-x-0 rounded-full bg-red-500 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)];
+}
+.official-mail-link:hover,
+.official-mail-link:focus-visible {
   @apply text-red-500;
+}
+.official-mail-link:hover::after,
+.official-mail-link:focus-visible::after {
+  @apply origin-left scale-x-100;
 }
 
 .social-link {
-  @apply flex w-fit gap-6 items-center;
+  @apply flex w-fit gap-3 items-center font-semibold;
 }
 .social-media {
-  @apply z-[50] w-16 h-16 bg-none border-2 border-white border-solid relative flex 
-  items-center justify-center text-2xl rounded-full overflow-hidden transform-gpu;
+  @apply w-12 h-12 bg-none border border-white/40 border-solid relative flex 
+  items-center justify-center text-xl rounded-full overflow-hidden transform-gpu;
 }
+/* Plain CSS on purpose: Tailwind 3.2's @apply mangles descendant selectors
+   here (".a:hover .b:before" compiled to ".a.b:hover :before"). */
 .social-media .icon {
-  @apply z-[53] relative duration-500;
+  position: relative;
+  z-index: 2;
 }
 .social-media:before {
-  @apply z-[52] content-[""] absolute top-full left-0 w-full h-full duration-500;
+  @apply z-[1] content-[""] absolute top-full left-0 w-full h-full duration-500;
 }
 
 .social-media.whatsapp:before {
@@ -51,6 +47,7 @@
   );
 }
 
-.social-link:hover .social-media:before {
-  @apply top-0;
+.social-link:hover .social-media:before,
+.social-link:focus-visible .social-media:before {
+  top: 0;
 }

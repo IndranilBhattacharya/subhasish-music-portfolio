@@ -178,7 +178,7 @@ const SuccessPage: NextPage = () => {
 
       <ToolBar />
 
-      <main className="flex-1 flex items-center justify-center w-[92vw] sm:w-[85vw] md:w-[75vw] lg:w-[55vw] xl:w-[48vw] 2xl:w-[42vw] px-4 pt-28 pb-32 z-10">
+      <main className="flex-1 flex items-center justify-center w-[92vw] sm:w-[85vw] md:w-[75vw] lg:w-[55vw] xl:w-[48vw] 2xl:w-[42vw] px-4 pt-10 lg:pt-28 pb-32 z-10">
         {/* VERIFYING */}
         {status === "verifying" && (
           <motion.div
@@ -186,7 +186,7 @@ const SuccessPage: NextPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center flex flex-col items-center gap-5"
           >
-            <Loader2 size={48} className="text-indigo-400 animate-spin" />
+            <Loader2 size={48} className="text-red-400 animate-spin" />
             <h1 className="text-2xl sm:text-3xl font-bold text-white">
               Confirming your payment...
             </h1>

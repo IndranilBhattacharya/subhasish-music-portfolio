@@ -1,46 +1,49 @@
-import { FC, memo, useState, useCallback, MouseEventHandler } from "react";
+import { FC, memo, useRef, useState, useEffect, useCallback } from "react";
 
-let interval: NodeJS.Timer;
 const alphabets = "abcdefghijklmnopqrstuvwxyz";
 
+/**
+ * Scrambles the text on hover, then resolves it left to right.
+ * Rendered in a monospace font so scrambled letters keep the exact width of
+ * the final text: no reflow or wrapping while it animates.
+ */
 const HackerEffect: FC<{ text: string }> = ({ text }) => {
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
   const [displayText, setDisplayText] = useState<string>(text?.toLowerCase());
 
-  const onMouseHoverHandler: MouseEventHandler<HTMLDivElement> = useCallback(
-    (_) => {
-      if (!text) {
-        return;
+  useEffect(() => () => clearInterval(intervalRef.current), []);
+
+  const onMouseEnterHandler = useCallback(() => {
+    if (!text) {
+      return;
+    }
+    clearInterval(intervalRef.current);
+    let iteration = 0;
+    intervalRef.current = setInterval(() => {
+      setDisplayText(
+        [...text.toLowerCase()]
+          .map((char, index) =>
+            index < iteration
+              ? char
+              : alphabets[Math.floor(Math.random() * alphabets.length)]
+          )
+          .join("")
+      );
+      if (iteration >= text.length) {
+        clearInterval(intervalRef.current);
       }
-      if (interval) {
-        clearInterval(interval);
-      }
-      let iteration = 0;
-      interval = setInterval(() => {
-        const interText = [...text.toLowerCase()]
-          .map((_, index) => {
-            if (index < iteration) {
-              return text[index];
-            }
-            return [...alphabets][Math.floor(Math.random() * 26)];
-          })
-          .join("");
-        setDisplayText(interText);
-        if (iteration >= text?.length) {
-          clearInterval(interval);
-        }
-        iteration += 1 / 2;
-      }, 25);
-    },
-    [text]
-  );
+      iteration += 1 / 2;
+    }, 25);
+  }, [text]);
 
   return (
-    <div
-      className="text-[5vw] lg:text-xl xl:text-3xl font-semibold"
-      onMouseOver={onMouseHoverHandler}
+    <span
+      aria-label={text}
+      onMouseEnter={onMouseEnterHandler}
+      className="font-mono font-bold text-[clamp(0.8rem,3.5vw,1.6rem)]"
     >
-      {displayText}
-    </div>
+      <span aria-hidden>{displayText}</span>
+    </span>
   );
 };
 

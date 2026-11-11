@@ -100,7 +100,7 @@ export default function CheckoutModal({
           >
             <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
               {/* Accent line */}
-              <div className="h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500" />
+              <div className="h-[2px] bg-gradient-to-r from-red-500 via-red-700 to-red-500" />
 
               <div className="p-7">
                 {/* Header */}
@@ -135,7 +135,7 @@ export default function CheckoutModal({
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
                         placeholder="Your name"
-                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50 focus:border-red-500/50 transition-all text-sm"
                       />
                     </div>
                   </div>
@@ -153,7 +153,7 @@ export default function CheckoutModal({
                         value={customerEmail}
                         onChange={(e) => { setCustomerEmail(e.target.value); setError(""); }}
                         placeholder="you@email.com"
-                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50 focus:border-red-500/50 transition-all text-sm"
                       />
                     </div>
                     <p className="text-[11px] text-zinc-600 mt-1.5">

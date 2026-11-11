@@ -132,14 +132,8 @@ interface SpotifyTrackResponse extends GenericAxiosResponse {
 interface MusicPlatform {
   url: string;
   name: string;
-  widthClass: string;
   avatar: StaticImageData;
 }
 
 interface MusicTool extends MusicPlatform {}
 
-interface SkillItem {
-  name: string;
-  theme: string;
-  background: string;
-}

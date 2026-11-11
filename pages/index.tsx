@@ -1,7 +1,7 @@
 import Head from "next/head";
 import type { NextPage } from "next";
-import { motion, useScroll } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
+import { motion } from "framer-motion";
 
 import {
   fetchYTChannelStats,
@@ -11,6 +11,7 @@ import {
 } from "../services/ytService";
 import IndexISRProps from "../types/IndexISRProps";
 import ToolBar from "../components/Utilities/ToolBar";
+import useScrollReveal from "../hooks/useScrollReveal";
 import YTVideoResponse from "../types/YTVideoResponse";
 import HeroMessage from "../components/Utilities/HeroMessage";
 import BottomNavBar from "../components/Utilities/BottomNavBar";
@@ -29,34 +30,21 @@ const homePageAnimationStates = {
 };
 
 const Home: NextPage<IndexISRProps> = (props) => {
-  const { scrollYProgress } = useScroll();
-  const [yPercent, setYPercent] = useState<number>(0);
-
   const contentClasses = "z-10 w-full lg:w-3/5 relative";
 
   const aboutMeSectionRef = useRef<HTMLDivElement>(null);
   const skillSetSectionRef = useRef<HTMLDivElement>(null);
   const portfolioSectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    scrollYProgress.onChange((currentYFraction) => {
-      if (currentYFraction <= 0.08) {
-        setYPercent(currentYFraction);
-      }
-    });
-  }, [setYPercent, scrollYProgress]);
+  useScrollReveal();
 
   return (
     <motion.div
       exit="exit"
       animate="stable"
       initial="initial"
-      style={{
-        backgroundImage: `url(${appBgTexture.src})`,
-        backgroundSize: `${yPercent >= 0.005 ? "0%" : "cover"}`,
-      }}
       variants={homePageAnimationStates}
-      className="relative w-full flex flex-col items-center bg-no-repeat bg-fixed bg-center lg:bg-right-top overflow-hidden"
+      className="relative w-full flex flex-col items-center overflow-hidden"
     >
       <Head>
         <title>Subhasish Music</title>
@@ -76,10 +64,15 @@ const Home: NextPage<IndexISRProps> = (props) => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div
+        aria-hidden
+        className="hero-texture"
+        style={{ backgroundImage: `url(${appBgTexture.src})` }}
+      />
       <ToolBar />
       <BottomNavBar />
-      <main className="w-[85vw] lg:w-[77vw] 2k:w-[65vw] max-w-[2000px] relative flex flex-col items-center">
-        <MainSectionsWrapper className={`${contentClasses} h-screen`}>
+      <main className="container-app relative flex flex-col items-center">
+        <MainSectionsWrapper className={contentClasses}>
           <HeroMessage />
         </MainSectionsWrapper>
         <MainSectionsWrapper
@@ -97,18 +90,23 @@ const Home: NextPage<IndexISRProps> = (props) => {
         <MainSectionsWrapper ref={aboutMeSectionRef} className="w-full h-fit">
           <AboutMeSection />
         </MainSectionsWrapper>
-        <section className="fixed top-0 z-20 right-[4vw] hidden lg:w-2/5 h-screen lg:flex justify-center items-center overflow-hidden">
-          <IllustrativeExpressions
-            {...{
-              ...props.ytStats,
-              aboutMeRef: aboutMeSectionRef,
-              youTubeRef: portfolioSectionRef,
-              skillSetRef: skillSetSectionRef,
-            }}
-          />
-        </section>
       </main>
-      <footer className="mt-36 pb-[10vw] lg:pb-0 w-full h-fit lg:h-screen relative flex flex-col items-center">
+      {/* Fixed illustration column, aligned to the right 2/5 of the container. */}
+      <section className="pointer-events-none fixed inset-0 z-20 hidden lg:flex justify-center">
+        <div className="container-app h-full flex justify-end">
+          <div className="w-2/5 h-full pl-8 flex justify-center items-center overflow-hidden">
+            <IllustrativeExpressions
+              {...{
+                ...props.ytStats,
+                aboutMeRef: aboutMeSectionRef,
+                youTubeRef: portfolioSectionRef,
+                skillSetRef: skillSetSectionRef,
+              }}
+            />
+          </div>
+        </div>
+      </section>
+      <footer className="mt-28 lg:mt-36 pb-28 lg:pb-8 w-full relative flex flex-col items-center">
         <ContactMeSection />
       </footer>
     </motion.div>

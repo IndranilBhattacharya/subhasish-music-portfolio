@@ -29,12 +29,15 @@ const AboutMeSection: FC = () => {
     <div
       id="about"
       ref={aboutMeContainerRef}
-      className="mt-32 w-full h-fit flex flex-col relative"
+      className="mt-28 lg:mt-32 w-full h-fit flex flex-col relative scroll-mt-20"
     >
       <SectionWatermark top={aboutMeY} content={"About Me"} />
-      <div className="w-full text-4xl font-bold">About Me</div>
-      <div className="w-full h-fit mt-12 lg:mt-0 overflow-hidden gap-8 flex flex-col lg:flex-row lg:items-center">
-        <div className="hidden lg:block w-[52%] h-[85vh] relative overflow-hidden">
+      <div data-reveal>
+        <div className="eyebrow">The Artist</div>
+        <h2 className="section-title">About Me</h2>
+      </div>
+      <div className="w-full h-fit mt-10 gap-8 lg:gap-12 flex flex-col lg:flex-row lg:items-center">
+        <div className="w-full lg:w-[48%] h-[60vh] max-h-[34rem] lg:max-h-none lg:h-[80vh] relative overflow-hidden rounded-2xl border border-white/10">
           <div
             className={`${classes["mask-animator"]} ${
               y > 0.35 ? classes["animate-mask"] : ""
@@ -42,8 +45,8 @@ const AboutMeSection: FC = () => {
           ></div>
           <div className={classes["bw-background"]}></div>
         </div>
-        <div className={classes.content}>
-          <section className="w-[78%] lg:w-full flex flex-col lg:block text-2xl lg:text-3xl font-semibold">
+        <div data-reveal className={classes.content}>
+          <section className="w-full font-display text-2xl lg:text-3xl font-semibold leading-snug">
             Greetings, I am Subhasish Chakraborty, a
             <TypeAnimation
               sequence={[
@@ -57,10 +60,10 @@ const AboutMeSection: FC = () => {
               wrapper="span"
               cursor={true}
               repeat={Infinity}
-              className="w-full lg:w-fit text-red-500"
+              className="text-red-500"
             />
           </section>
-          <section className="mt-4 text-gray-300">
+          <section className="mt-5 leading-relaxed text-gray-300">
             My expertise lies in Indian pop, EDM, Bengali and Hindi songs. I am
             well-versed in a variety of musical styles and genres. I have a keen
             ear for melody and a talent for creating unique, catchy songs. My
