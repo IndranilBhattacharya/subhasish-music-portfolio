@@ -80,9 +80,26 @@ body::before {
 }
 
 .hero-texture {
-  @apply absolute top-0 inset-x-0 h-screen bg-no-repeat bg-cover bg-center lg:bg-right-top pointer-events-none;
+  @apply absolute top-0 inset-x-0 h-screen bg-no-repeat pointer-events-none;
+  /* Rings are centred on the hero orb. Mirrors the orb layout:
+     mobile  - HeroMessage holder: top -2vh, right -22vw, width min(95vw, 38rem), below the 3.5rem toolbar.
+     lg      - fixed column: right 2/5 of .container-app with pl-8, vertically centred. */
+  --orb: min(95vw, 38rem);
+  --tex: calc(var(--orb) * 3);
+  background-size: var(--tex) var(--tex);
+  background-position: calc(116vw - var(--orb) / 2 - var(--tex) / 2)
+    calc(3.5rem - 2vh + var(--orb) / 2 - var(--tex) / 2);
   mask-image: linear-gradient(to bottom, #000 55%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+@screen lg {
+  .hero-texture {
+    --container: min(84vw, 90rem);
+    --orb: calc(var(--container) * 0.4 - 2rem);
+    background-position: calc(50vw + var(--container) * 0.3 + 1rem - var(--tex) / 2)
+      calc(50vh - var(--tex) / 2);
+  }
 }
 
 .app-section :not(.watermark) {

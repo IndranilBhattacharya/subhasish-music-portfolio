@@ -17,13 +17,16 @@ const AboutMeSection: FC = () => {
   });
 
   const aboutMeY = useParallax(scrollYProgress);
-  const [y, setY] = useState<number>(0);
+  // Latch: reveal once, never snap back to B/W; also avoids a re-render per scroll frame.
+  const [revealed, setRevealed] = useState(false);
 
-  useEffect(() => {
-    scrollYProgress.onChange((latestY) => {
-      setY(latestY);
-    });
-  }, [setY, scrollYProgress]);
+  useEffect(
+    () =>
+      scrollYProgress.onChange((latestY) => {
+        if (latestY > 0.35) setRevealed(true);
+      }),
+    [scrollYProgress]
+  );
 
   return (
     <div
@@ -37,11 +40,12 @@ const AboutMeSection: FC = () => {
         <h2 className="section-title">About Me</h2>
       </div>
       <div className="w-full h-fit mt-10 gap-8 lg:gap-12 flex flex-col lg:flex-row lg:items-center">
-        <div className="w-full lg:w-[48%] h-[60vh] max-h-[34rem] lg:max-h-none lg:h-[80vh] relative overflow-hidden rounded-2xl border border-white/10">
+        {/* Box matches the photo's aspect so the photo, B/W copy and mask sprite frames line up exactly. */}
+        <div className="w-full lg:w-[48%] aspect-[2947/3139] relative overflow-hidden rounded-2xl border border-white/10">
           <div
             className={`${classes["mask-animator"]} ${
-              y > 0.35 ? classes["animate-mask"] : ""
-            } opacity-90`}
+              revealed ? classes["animate-mask"] : ""
+            }`}
           ></div>
           <div className={classes["bw-background"]}></div>
         </div>
