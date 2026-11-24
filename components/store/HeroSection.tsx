@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, Download, Loader2, Check } from "lucide-react";
+import { Sparkles, ArrowRight, Download, Loader2, Check, Gift } from "lucide-react";
 import CheckoutModal from "./CheckoutModal";
 
 interface FeaturedProductProps {
@@ -66,6 +66,7 @@ export default function HeroSection({ product, currency, purchased }: FeaturedPr
 
   const price = currency === "USD" ? product.price_usd : product.price_inr;
   const currencySymbol = currency === "USD" ? "$" : "₹";
+  const isFree = price === 0;
 
   return (
     <>
@@ -74,18 +75,32 @@ export default function HeroSection({ product, currency, purchased }: FeaturedPr
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-500/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-red-700/20 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none blur-sm">
-          <Sparkles size={160} className="text-red-300 w-40 h-40" />
-        </div>
+        {!isFree && (
+          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none blur-sm">
+            <Sparkles size={160} className="text-red-300 w-40 h-40" />
+          </div>
+        )}
 
         <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
           <div className="order-2 md:order-1 flex flex-col items-start gap-5">
             <motion.span 
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-red-500/20 to-red-700/20 text-red-300 text-sm font-semibold tracking-wide border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
+              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${
+                isFree
+                  ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                  : "bg-gradient-to-r from-red-500/20 to-red-700/20 text-red-300 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
+              } text-sm font-semibold tracking-wide`}
             >
-              <Sparkles size={14}  />
-              {purchased ? "You Own This" : "Featured Release"}
+              {purchased ? (
+                "You Own This"
+              ) : isFree ? (
+                "Free Release"
+              ) : (
+                <>
+                  <Sparkles size={14} />
+                  Featured Release
+                </>
+              )}
             </motion.span>
 
             <motion.h1 
@@ -119,6 +134,17 @@ export default function HeroSection({ product, currency, purchased }: FeaturedPr
                   {downloading ? <Loader2 size={18} className="animate-spin" /> : downloaded ? <Check size={18} /> : <Download size={18}  />}
                   {downloading ? "Downloading..." : downloaded ? "Downloaded" : "Download Now"}
                 </button>
+              ) : isFree ? (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="group relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white rounded-2xl font-bold text-base transition-all shadow-[0_0_25px_rgba(16,185,129,0.3)] hover:shadow-[0_0_35px_rgba(16,185,129,0.5)] hover:-translate-y-1 flex items-center justify-center gap-2 overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Gift size={18} />
+                    Claim Free Release
+                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
               ) : (
                 <button
                   onClick={() => setShowModal(true)}
@@ -140,6 +166,13 @@ export default function HeroSection({ product, currency, purchased }: FeaturedPr
               transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
               className="relative w-full aspect-[4/3] max-w-lg rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10 group-hover:border-red-500/30 transition-colors duration-700"
             >
+              {isFree && !purchased && (
+                <div className="absolute top-0 left-0 z-20 overflow-hidden w-36 h-36 pointer-events-none">
+                  <div className="absolute transform -rotate-45 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 text-white font-black text-xs uppercase tracking-widest text-center py-1.5 left-[-42px] top-[26px] w-[160px] shadow-[0_4px_14px_rgba(16,185,129,0.4)] border-y border-white/30 select-none">
+                    FREE
+                  </div>
+                </div>
+              )}
               <Image
                 src={product.cover_image_url || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"}
                 alt={product.name}

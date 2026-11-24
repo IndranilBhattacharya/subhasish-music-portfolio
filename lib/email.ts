@@ -20,8 +20,23 @@ interface PurchaseEmailParams {
   baseUrl?: string;
 }
 
+export interface FreeProductEmailParams {
+  customerEmail: string;
+  customerName?: string;
+  productName: string;
+  downloadUrl?: string;
+  orderId?: string;
+  baseUrl?: string;
+}
+
 function getBccList(): string[] | undefined {
   const raw = process.env.RESEND_BCC_EMAILS || "";
+  const list = raw.split(",").map((e) => e.trim()).filter((e) => e.includes("@"));
+  return list.length > 0 ? list : undefined;
+}
+
+function getCcList(): string[] | undefined {
+  const raw = process.env.RESEND_CC_EMAILS || "";
   const list = raw.split(",").map((e) => e.trim()).filter((e) => e.includes("@"));
   return list.length > 0 ? list : undefined;
 }
@@ -239,17 +254,214 @@ export async function sendPurchaseEmail(params: PurchaseEmailParams): Promise<vo
     const resend = new Resend(apiKey);
     const from = process.env.RESEND_FROM_EMAIL || "Subhasish Music <onboarding@resend.dev>";
     const bcc = getBccList();
+    const cc = getCcList();
 
     await resend.emails.send({
       from,
       to: customerEmail,
+      cc,
       bcc,
       subject: `Order Confirmed — ${params.productName}`,
       html: buildPurchaseEmailHtml(params),
     });
 
-    console.log(`[EMAIL SENT] To: ${customerEmail}${bcc ? ` | BCC: ${bcc.join(", ")}` : ""}`);
+    console.log(`[EMAIL SENT] To: ${customerEmail}${cc ? ` | CC: ${cc.join(", ")}` : ""}${bcc ? ` | BCC: ${bcc.join(", ")}` : ""}`);
   } catch (err: any) {
     console.error("[EMAIL ERROR]", err.message);
+  }
+}
+
+function buildFreeProductEmailHtml(params: FreeProductEmailParams): string {
+  const { customerName, productName, downloadUrl, orderId, baseUrl } = params;
+  const contactPhone = process.env.CONTACT_PHONE || "";
+  const contactAddress = process.env.CONTACT_ADDRESS || "";
+
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL 
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` 
+    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
+  const storeUrl = baseUrl || vercelUrl || "https://subhasishmusic.com";
+  const displayName = customerName || "there";
+  const logoUrl = "https://i.ibb.co/QvZqH1Q6/subhasish-logo-s.png";
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Your Free Download — Subhasish</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0c0c0f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#e4e4e7;">
+
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#0c0c0f;">
+    <tr>
+      <td align="center" style="padding:40px 16px 32px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:520px;">
+
+          <!-- Brand Header -->
+          <tr>
+            <td align="center" style="padding:0 0 32px;">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    <img src="${logoUrl}" alt="S" width="28" height="28" style="display:block;border:0;" />
+                  </td>
+                  <td style="vertical-align:middle;padding-left:2px;">
+                    <span style="font-size:14px;font-weight:800;color:#ffffff;text-transform:uppercase;letter-spacing:1.5px;">ubhasish</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Main Card -->
+          <tr>
+            <td style="background-color:#18181b;border-radius:16px;overflow:hidden;border:1px solid #27272a;">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+
+                <!-- Accent line: Emerald / Teal Gradient -->
+                <tr>
+                  <td style="height:3px;background:linear-gradient(90deg,#10b981,#06b6d4,#10b981);"></td>
+                </tr>
+
+                <!-- Free Release Badge + Greeting -->
+                <tr>
+                  <td style="padding:32px 28px 0;text-align:center;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                      <tr>
+                        <td style="background-color:#052e16;border:1px solid #14532d;border-radius:100px;padding:5px 16px;">
+                          <span style="font-size:12px;font-weight:600;color:#4ade80;letter-spacing:0.5px;">&#10003; Free Release Unlocked</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:20px 28px 0;text-align:center;">
+                    <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#fafafa;line-height:1.3;">Hey ${displayName}!</h1>
+                    <p style="margin:0;font-size:14px;color:#a1a1aa;line-height:1.6;">
+                      Thanks for tuning in! Your free copy of <strong style="color:#e4e4e7;">${productName}</strong> is ready. Hope it fuels your next track or production session!
+                    </p>
+                  </td>
+                </tr>
+
+                <!-- Download Button -->
+                ${downloadUrl ? `
+                <tr>
+                  <td style="padding:28px 28px 0;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td align="center" style="background-color:#10b981;border-radius:12px;box-shadow:0 4px 14px rgba(16,185,129,0.3);">
+                          <a href="${downloadUrl}" target="_blank" style="display:block;padding:15px 20px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;text-align:center;letter-spacing:0.3px;">&#8595;&nbsp;&nbsp;Download ${productName}</a>
+                        </td>
+                      </tr>
+                    </table>
+                    <p style="margin:10px 0 0;text-align:center;font-size:11px;color:#71717a;">Direct, secure download hosted on Supabase.</p>
+                  </td>
+                </tr>
+                ` : ""}
+
+                <!-- Order Details -->
+                <tr>
+                  <td style="padding:28px 28px 0;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #27272a;">
+                      <tr>
+                        <td colspan="2" style="padding:16px 0 8px;font-size:11px;font-weight:700;color:#52525b;text-transform:uppercase;letter-spacing:1.5px;">Release Summary</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:13px;color:#71717a;">Product</td>
+                        <td align="right" style="padding:6px 0;font-size:13px;color:#e4e4e7;font-weight:500;">${productName}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:13px;color:#71717a;">Price</td>
+                        <td align="right" style="padding:6px 0;font-size:13px;color:#4ade80;font-weight:600;">FREE</td>
+                      </tr>
+                      ${orderId ? `<tr>
+                        <td style="padding:6px 0;font-size:13px;color:#71717a;">Claim ID</td>
+                        <td align="right" style="padding:6px 0;font-size:12px;color:#52525b;font-family:monospace;">${orderId.slice(0, 8)}...</td>
+                      </tr>` : ""}
+                      <tr>
+                        <td style="padding:6px 0;font-size:13px;color:#71717a;">Access</td>
+                        <td align="right" style="padding:6px 0;font-size:13px;color:#e4e4e7;font-weight:500;">Permanent</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Bottom padding -->
+                <tr><td style="height:28px;"></td></tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:28px 8px 0;text-align:center;">
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                <tr>
+                  <td style="vertical-align:middle;">
+                    <img src="${logoUrl}" alt="S" width="16" height="16" style="display:block;border:0;opacity:0.5;" />
+                  </td>
+                  <td style="vertical-align:middle;padding-left:2px;">
+                    <span style="font-size:11px;font-weight:700;color:#52525b;text-transform:uppercase;letter-spacing:1px;">ubhasish</span>
+                  </td>
+                </tr>
+              </table>
+              ${contactPhone ? `<p style="margin:8px 0 0;font-size:12px;color:#3f3f46;">${contactPhone}</p>` : ""}
+              ${contactAddress ? `<p style="margin:2px 0 0;font-size:12px;color:#3f3f46;">${contactAddress}</p>` : ""}
+              <p style="margin:12px 0 0;">
+                <a href="${storeUrl}/samples-store" style="font-size:11px;color:#71717a;text-decoration:none;">The Vault</a>
+                <span style="color:#27272a;margin:0 6px;">&middot;</span>
+                <a href="${storeUrl}" style="font-size:11px;color:#71717a;text-decoration:none;">Website</a>
+              </p>
+              <p style="margin:16px 0 0;font-size:10px;color:#27272a;line-height:1.5;">
+                You received this because you claimed a free release on subhasishmusic.com
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>`;
+}
+
+export async function sendFreeProductEmail(params: FreeProductEmailParams): Promise<void> {
+  const { customerEmail } = params;
+  if (!customerEmail) {
+    console.warn("[EMAIL] No customer email — skipping.");
+    return;
+  }
+
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || apiKey === "YOUR_RESEND_API_KEY") {
+    console.warn("[EMAIL] RESEND_API_KEY not configured — skipping.");
+    return;
+  }
+
+  try {
+    const { Resend } = await import("resend");
+    const resend = new Resend(apiKey);
+    const from = process.env.RESEND_FROM_EMAIL || "Subhasish Music <onboarding@resend.dev>";
+    const bcc = getBccList();
+    const cc = getCcList();
+
+    await resend.emails.send({
+      from,
+      to: customerEmail,
+      cc,
+      bcc,
+      subject: `Your Free Download — ${params.productName}`,
+      html: buildFreeProductEmailHtml(params),
+    });
+
+    console.log(`[FREE EMAIL SENT] To: ${customerEmail}${cc ? ` | CC: ${cc.join(", ")}` : ""}${bcc ? ` | BCC: ${bcc.join(", ")}` : ""}`);
+  } catch (err: any) {
+    console.error("[FREE EMAIL ERROR]", err.message);
   }
 }
