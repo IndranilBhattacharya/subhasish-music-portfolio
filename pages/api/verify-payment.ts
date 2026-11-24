@@ -192,6 +192,13 @@ export default async function handler(
       throw new Error(`Signed URL generation failed: ${storageError.message}`);
     }
 
+    // Atomic increment for download counter in products table (concurrency-safe if RPC exists)
+    try {
+      await supabaseAdmin.rpc("increment_product_download", { product_id: productId });
+    } catch {
+      // Silently continue if RPC not yet created
+    }
+
     const host = req.headers.host;
     const protocol = req.headers["x-forwarded-proto"] || (host?.includes("localhost") ? "http" : "https");
     const baseUrl = host ? `${protocol}://${host}` : undefined;

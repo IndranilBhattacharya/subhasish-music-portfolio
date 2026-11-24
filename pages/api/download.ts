@@ -97,6 +97,13 @@ export default async function handler(
       return res.status(500).json({ error: "Failed to generate download link" });
     }
 
+    // Atomic increment for download counter in products table (concurrency-safe if RPC exists)
+    try {
+      await supabaseAdmin.rpc("increment_product_download", { product_id: productId });
+    } catch {
+      // Gracefully continue if RPC not yet created
+    }
+
     return res.status(200).json({
       success: true,
       download_url: signedUrlData.signedUrl,

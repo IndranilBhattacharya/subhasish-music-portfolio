@@ -23,7 +23,7 @@ CREATE TABLE public.orders (
   customer_name TEXT,
   currency TEXT NOT NULL CHECK (currency IN ('USD', 'INR')),
   amount_paid NUMERIC(10, 2) NOT NULL,
-  payment_provider TEXT NOT NULL CHECK (payment_provider IN ('stripe', 'razorpay')),
+  payment_provider TEXT NOT NULL CHECK (payment_provider IN ('stripe', 'razorpay', 'free')),
   payment_intent_id TEXT UNIQUE NOT NULL, -- Strike checkout session ID or Razorpay order/payment ID
   status TEXT NOT NULL DEFAULT 'completed',
   created_at TIMESTAMPTZ DEFAULT NOW()

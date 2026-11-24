@@ -17,7 +17,14 @@ const nextConfig = withPWA({
     defaultLocale: "en",
   },
   images: {
-    domains: ["i.ytimg.com", "i.scdn.co", "i.ibb.co"],
+    domains: [
+      "i.ytimg.com",
+      "i.scdn.co",
+      "i.ibb.co",
+      "images.unsplash.com",
+      "tvplhrzhxamgwvahbzfg.supabase.co",
+      "cdn.cosmicjs.com",
+    ],
   },
 });
 

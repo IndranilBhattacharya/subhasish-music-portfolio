@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShoppingCart, Download, Loader2, Check } from "lucide-react";
+import { ShoppingCart, Download, Loader2, Check, Gift } from "lucide-react";
 import CheckoutModal from "./CheckoutModal";
 
 interface Product {
@@ -30,6 +30,7 @@ export default function ProductCard({ product, currency, purchased }: ProductCar
   const price = currency === "USD" ? product.price_usd : product.price_inr;
   const mrp = currency === "USD" ? product.mrp_usd : product.mrp_inr;
   const currencySymbol = currency === "USD" ? "$" : "₹";
+  const isFree = price === 0;
 
   const getFingerprint = useCallback(async (): Promise<string> => {
     try {
@@ -90,6 +91,14 @@ export default function ProductCard({ product, currency, purchased }: ProductCar
         className="bg-zinc-900/80 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-700 transition-all duration-300 flex flex-col group"
       >
         <div className="relative h-56 w-full bg-zinc-800 overflow-hidden">
+          {/* Celebratory Corner Wrap Banner for Free Releases */}
+          {isFree && !purchased && (
+            <div className="absolute top-0 left-0 z-20 overflow-hidden w-28 h-28 pointer-events-none">
+              <div className="absolute transform -rotate-45 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 text-white font-black text-[10px] sm:text-[11px] uppercase tracking-widest text-center py-1 left-[-35px] top-[18px] w-[130px] shadow-[0_4px_14px_rgba(16,185,129,0.4)] border-y border-white/30 select-none drop-shadow">
+                FREE
+              </div>
+            </div>
+          )}
           <Image
             src={product.cover_image_url || "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
             alt={product.name || "Product image"}
@@ -114,11 +123,21 @@ export default function ProductCard({ product, currency, purchased }: ProductCar
 
           <div className="flex items-end justify-between mb-5">
             <div>
-              {!purchased && mrp && (
+              {!purchased && Boolean(mrp && mrp > (price || 0)) ? (
                 <span className="text-xs text-zinc-600 line-through block mb-0.5">{currencySymbol}{mrp}</span>
-              )}
+              ) : null}
               <span className="text-2xl font-extrabold text-white">
-                {purchased ? "" : price !== undefined ? `${currencySymbol}${price}` : "Free"}
+                {purchased ? (
+                  ""
+                ) : isFree ? (
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500 font-black">
+                    FREE
+                  </span>
+                ) : price !== undefined ? (
+                  `${currencySymbol}${price}`
+                ) : (
+                  "Free"
+                )}
               </span>
             </div>
           </div>
@@ -136,6 +155,14 @@ export default function ProductCard({ product, currency, purchased }: ProductCar
               ) : (
                 <><Download size={16}  /> Download</>
               )}
+            </button>
+          ) : isFree ? (
+            <button
+              onClick={() => setShowModal(true)}
+              className="w-full py-3 px-4 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)]"
+            >
+              <Gift size={16} />
+              Claim Free Release
             </button>
           ) : (
             <button

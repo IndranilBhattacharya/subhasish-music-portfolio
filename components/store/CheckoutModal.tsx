@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, User, ArrowRight, Loader2 } from "lucide-react";
+import { X, Mail, User, ArrowRight, Loader2, Gift } from "lucide-react";
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -26,6 +26,22 @@ export default function CheckoutModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
+
+  const isFree = price === 0;
+
+  const getFingerprint = useCallback(async (): Promise<string> => {
+    try {
+      const FingerprintJS = (await import("@fingerprintjs/fingerprintjs")).default;
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      return result.visitorId;
+    } catch {
+      const raw = [navigator.userAgent, navigator.language, screen.width, screen.height, screen.colorDepth, new Date().getTimezoneOffset()].join("|");
+      let hash = 0;
+      for (let i = 0; i < raw.length; i++) { hash = (hash << 5) - hash + raw.charCodeAt(i); hash |= 0; }
+      return `fallback-${Math.abs(hash).toString(36)}`;
+    }
+  }, []);
 
   useEffect(() => {
     if (isOpen && nameRef.current) {
@@ -54,6 +70,7 @@ export default function CheckoutModal({
 
     setLoading(true);
     try {
+      const fingerprint = await getFingerprint();
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,11 +79,17 @@ export default function CheckoutModal({
           currency,
           customer_name: customerName,
           customer_email: customerEmail,
+          fingerprint,
         }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Checkout failed");
+
+      if (data.is_free && data.success_url) {
+        window.location.href = data.success_url;
+        return;
+      }
 
       if (data.url) {
         window.location.href = data.url;
@@ -100,17 +123,34 @@ export default function CheckoutModal({
           >
             <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
               {/* Accent line */}
-              <div className="h-[2px] bg-gradient-to-r from-red-500 via-red-700 to-red-500" />
+              <div
+                className={`h-[2px] ${
+                  isFree
+                    ? "bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500"
+                    : "bg-gradient-to-r from-red-500 via-red-700 to-red-500"
+                }`}
+              />
 
               <div className="p-7">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h3 className="text-lg font-bold text-white mb-1">Checkout</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-lg font-bold text-white">
+                        {isFree ? "Claim Free Release" : "Checkout"}
+                      </h3>
+                      {isFree && (
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          100% Free
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-zinc-500">
                       <span className="text-zinc-300 font-medium">{productName}</span>
                       <span className="mx-1.5 text-zinc-700">&middot;</span>
-                      <span className="text-white font-semibold">{currencySymbol}{price}</span>
+                      <span className={isFree ? "text-emerald-400 font-bold" : "text-white font-semibold"}>
+                        {isFree ? "Free Download" : `${currencySymbol}${price}`}
+                      </span>
                     </p>
                   </div>
                   <button
@@ -157,7 +197,9 @@ export default function CheckoutModal({
                       />
                     </div>
                     <p className="text-[11px] text-zinc-600 mt-1.5">
-                      License key & download link will be sent here.
+                      {isFree
+                        ? "Your download link will be emailed here. No spam ever."
+                        : "License key & download link will be sent here."}
                     </p>
                   </div>
 
@@ -172,10 +214,22 @@ export default function CheckoutModal({
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 bg-white hover:bg-zinc-100 text-zinc-900 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-2"
+                    className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-2 ${
+                      isFree
+                        ? "bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                        : "bg-white hover:bg-zinc-100 text-zinc-900"
+                    }`}
                   >
                     {loading ? (
-                      <Loader2 size={16} className="animate-spin" />
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        {isFree ? "Unlocking Release..." : "Processing..."}
+                      </>
+                    ) : isFree ? (
+                      <>
+                        <Gift size={16} />
+                        Claim & Download Now
+                      </>
                     ) : (
                       <>
                         Pay {currencySymbol}{price}
